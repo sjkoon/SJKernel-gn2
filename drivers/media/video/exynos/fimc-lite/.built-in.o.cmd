@@ -1,1 +1,1 @@
-cmd_drivers/media/video/exynos/fimc-lite/built-in.o :=  /home/sjkoon/Perseus-S3/toolchain/arm-eabi-4/bin/arm-linux-androideabi-ld -EL    -r -o drivers/media/video/exynos/fimc-lite/built-in.o drivers/media/video/exynos/fimc-lite/fimc-lite.o 
+cmd_drivers/media/video/exynos/fimc-lite/built-in.o :=  /home/sjkoon/SJKernel-Gn2/toolchain/arm-eabi-4/bin/arm-linux-androideabi-ld -EL    -r -o drivers/media/video/exynos/fimc-lite/built-in.o drivers/media/video/exynos/fimc-lite/fimc-lite.o 

@@ -12,7 +12,7 @@ export ARCH=arm
 
 cd $KERNELDIR/
 make sjkernel_e250_$1_defconfig
-nice -n 10 make -j4 USE_CCACHE=1 || exit 1
+nice -n 10 make -j4 -ofast USE_CCACHE=1 || exit 1
 #remove previous ramfs files
 rm -rf $RAMFS_TMP
 rm -rf $RAMFS_TMP.cpio

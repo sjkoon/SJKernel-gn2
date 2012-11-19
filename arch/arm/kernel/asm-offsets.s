@@ -10,15 +10,15 @@
 @ GNU C (GCC) version 4.4.3 (arm-linux-androideabi)
 @	compiled by GNU C version 4.4.3, GMP version 4.2.4, MPFR version 2.4.1.
 @ GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
-@ options passed:  -nostdinc -I/home/sjkoon/Perseus-S3/arch/arm/include
+@ options passed:  -nostdinc -I/home/sjkoon/SJKernel-Gn2/arch/arm/include
 @ -Iarch/arm/include/generated -Iinclude -Iarch/arm/mach-exynos/include
 @ -Iarch/arm/plat-s5p/include -Iarch/arm/plat-samsung/include -imultilib
 @ armv7-a -iprefix
-@ /home/sjkoon/Perseus-S3/toolchain/arm-eabi-4/bin/../lib/gcc/arm-linux-androideabi/4.4.3/
+@ /home/sjkoon/SJKernel-Gn2/toolchain/arm-eabi-4/bin/../lib/gcc/arm-linux-androideabi/4.4.3/
 @ -D__KERNEL__ -D__LINUX_ARM_ARCH__=7 -Uarm -DKBUILD_STR(s)=#s
 @ -DKBUILD_BASENAME=KBUILD_STR(asm_offsets)
 @ -DKBUILD_MODNAME=KBUILD_STR(asm_offsets) -isystem
-@ /home/sjkoon/Perseus-S3/toolchain/arm-eabi-4/bin/../lib/gcc/arm-linux-androideabi/4.4.3/include
+@ /home/sjkoon/SJKernel-Gn2/toolchain/arm-eabi-4/bin/../lib/gcc/arm-linux-androideabi/4.4.3/include
 @ -include include/generated/autoconf.h -MD
 @ arch/arm/kernel/.asm-offsets.s.d arch/arm/kernel/asm-offsets.c -mbionic
 @ -fpic -mlittle-endian -mfpu=neon -march=armv7-a -mtune=cortex-a9 -marm
@@ -458,16 +458,16 @@ main:
 	.4byte	0x0
 	.4byte	0x0
 	.file 2 "include/asm-generic/int-ll64.h"
-	.file 3 "/home/sjkoon/Perseus-S3/arch/arm/include/asm/posix_types.h"
+	.file 3 "/home/sjkoon/SJKernel-Gn2/arch/arm/include/asm/posix_types.h"
 	.file 4 "include/linux/types.h"
 	.file 5 "include/linux/capability.h"
-	.file 6 "/home/sjkoon/Perseus-S3/arch/arm/include/asm/outercache.h"
+	.file 6 "/home/sjkoon/SJKernel-Gn2/arch/arm/include/asm/outercache.h"
 	.file 7 "include/linux/thread_info.h"
 	.file 8 "include/linux/time.h"
 	.file 9 "include/linux/sched.h"
-	.file 10 "/home/sjkoon/Perseus-S3/arch/arm/include/asm/spinlock_types.h"
+	.file 10 "/home/sjkoon/SJKernel-Gn2/arch/arm/include/asm/spinlock_types.h"
 	.file 11 "include/linux/spinlock_types.h"
-	.file 12 "/home/sjkoon/Perseus-S3/arch/arm/include/asm/processor.h"
+	.file 12 "/home/sjkoon/SJKernel-Gn2/arch/arm/include/asm/processor.h"
 	.file 13 "include/asm-generic/atomic-long.h"
 	.file 14 "include/linux/rbtree.h"
 	.file 15 "include/linux/cpumask.h"
@@ -477,15 +477,15 @@ main:
 	.file 19 "include/linux/wait.h"
 	.file 20 "include/linux/kernel.h"
 	.file 21 "include/linux/completion.h"
-	.file 22 "/home/sjkoon/Perseus-S3/arch/arm/include/asm/page.h"
+	.file 22 "/home/sjkoon/SJKernel-Gn2/arch/arm/include/asm/page.h"
 	.file 23 "include/linux/mm_types.h"
-	.file 24 "/home/sjkoon/Perseus-S3/arch/arm/include/asm/mmu.h"
-	.file 25 "/home/sjkoon/Perseus-S3/arch/arm/include/asm/system.h"
+	.file 24 "/home/sjkoon/SJKernel-Gn2/arch/arm/include/asm/mmu.h"
+	.file 25 "/home/sjkoon/SJKernel-Gn2/arch/arm/include/asm/system.h"
 	.file 26 "include/linux/mm.h"
 	.file 27 "include/asm-generic/cputime.h"
 	.file 28 "include/linux/rcupdate.h"
 	.file 29 "include/linux/sem.h"
-	.file 30 "/home/sjkoon/Perseus-S3/arch/arm/include/asm/signal.h"
+	.file 30 "/home/sjkoon/SJKernel-Gn2/arch/arm/include/asm/signal.h"
 	.file 31 "include/asm-generic/signal-defs.h"
 	.file 32 "include/asm-generic/siginfo.h"
 	.file 33 "include/linux/signal.h"
@@ -507,15 +507,15 @@ main:
 	.file 49 "include/linux/vmstat.h"
 	.file 50 "include/linux/ioport.h"
 	.file 51 "include/linux/dma-mapping.h"
-	.file 52 "/home/sjkoon/Perseus-S3/arch/arm/include/asm/cacheflush.h"
-	.file 53 "/home/sjkoon/Perseus-S3/arch/arm/include/asm/hwcap.h"
+	.file 52 "/home/sjkoon/SJKernel-Gn2/arch/arm/include/asm/cacheflush.h"
+	.file 53 "/home/sjkoon/SJKernel-Gn2/arch/arm/include/asm/hwcap.h"
 	.file 54 "include/linux/printk.h"
 	.file 55 "include/linux/timex.h"
-	.file 56 "/home/sjkoon/Perseus-S3/arch/arm/include/asm/memory.h"
+	.file 56 "/home/sjkoon/SJKernel-Gn2/arch/arm/include/asm/memory.h"
 	.file 57 "include/asm-generic/percpu.h"
 	.file 58 "include/linux/percpu_counter.h"
 	.file 59 "include/linux/debug_locks.h"
-	.file 60 "/home/sjkoon/Perseus-S3/arch/arm/include/asm/cachetype.h"
+	.file 60 "/home/sjkoon/SJKernel-Gn2/arch/arm/include/asm/cachetype.h"
 	.section	.debug_info
 	.4byte	0x3853
 	.2byte	0x2
@@ -9332,8 +9332,6 @@ main:
 	.ascii	"sigpending\000"
 .LASF695:
 	.ascii	"cpu_cache_fns\000"
-.LASF737:
-	.ascii	"/home/sjkoon/Perseus-S3\000"
 .LASF418:
 	.ascii	"wait_table_hash_nr_entries\000"
 .LASF326:
@@ -9442,6 +9440,8 @@ main:
 	.ascii	"level\000"
 .LASF640:
 	.ascii	"exec_max\000"
+.LASF668:
+	.ascii	"run_list\000"
 .LASF730:
 	.ascii	"vm_event_states\000"
 .LASF424:
@@ -9730,8 +9730,8 @@ main:
 	.ascii	"shared_pending\000"
 .LASF602:
 	.ascii	"enqueue_task\000"
-.LASF668:
-	.ascii	"run_list\000"
+.LASF737:
+	.ascii	"/home/sjkoon/SJKernel-Gn2\000"
 .LASF657:
 	.ascii	"load\000"
 .LASF328:

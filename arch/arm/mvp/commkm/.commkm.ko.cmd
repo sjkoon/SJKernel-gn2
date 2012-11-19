@@ -1,1 +1,1 @@
-cmd_arch/arm/mvp/commkm/commkm.ko := /home/sjkoon/Perseus-S3/toolchain/arm-eabi-4/bin/arm-linux-androideabi-ld -EL -r  -T /home/sjkoon/Perseus-S3/scripts/module-common.lds --build-id  -o arch/arm/mvp/commkm/commkm.ko arch/arm/mvp/commkm/commkm.o arch/arm/mvp/commkm/commkm.mod.o
+cmd_arch/arm/mvp/commkm/commkm.ko := /home/sjkoon/SJKernel-Gn2/toolchain/arm-eabi-4/bin/arm-linux-androideabi-ld -EL -r  -T /home/sjkoon/SJKernel-Gn2/scripts/module-common.lds --build-id  -o arch/arm/mvp/commkm/commkm.ko arch/arm/mvp/commkm/commkm.o arch/arm/mvp/commkm/commkm.mod.o

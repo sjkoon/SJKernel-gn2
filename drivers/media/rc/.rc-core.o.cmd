@@ -1,1 +1,1 @@
-cmd_drivers/media/rc/rc-core.o := /home/sjkoon/Perseus-S3/toolchain/arm-eabi-4/bin/arm-linux-androideabi-ld -EL    -r -o drivers/media/rc/rc-core.o drivers/media/rc/rc-main.o drivers/media/rc/ir-raw.o 
+cmd_drivers/media/rc/rc-core.o := /home/sjkoon/SJKernel-Gn2/toolchain/arm-eabi-4/bin/arm-linux-androideabi-ld -EL    -r -o drivers/media/rc/rc-core.o drivers/media/rc/rc-main.o drivers/media/rc/ir-raw.o 

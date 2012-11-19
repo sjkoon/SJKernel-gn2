@@ -1,1 +1,1 @@
-cmd_drivers/usb/misc/mdm_bridge.o := /home/sjkoon/Perseus-S3/toolchain/arm-eabi-4/bin/arm-linux-androideabi-ld -EL    -r -o drivers/usb/misc/mdm_bridge.o drivers/usb/misc/mdm_ctrl_bridge.o drivers/usb/misc/mdm_data_bridge.o 
+cmd_drivers/usb/misc/mdm_bridge.o := /home/sjkoon/SJKernel-Gn2/toolchain/arm-eabi-4/bin/arm-linux-androideabi-ld -EL    -r -o drivers/usb/misc/mdm_bridge.o drivers/usb/misc/mdm_ctrl_bridge.o drivers/usb/misc/mdm_data_bridge.o 

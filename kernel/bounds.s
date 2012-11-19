@@ -10,15 +10,15 @@
 @ GNU C (GCC) version 4.4.3 (arm-linux-androideabi)
 @	compiled by GNU C version 4.4.3, GMP version 4.2.4, MPFR version 2.4.1.
 @ GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
-@ options passed:  -nostdinc -I/home/sjkoon/Perseus-S3/arch/arm/include
+@ options passed:  -nostdinc -I/home/sjkoon/SJKernel-Gn2/arch/arm/include
 @ -Iarch/arm/include/generated -Iinclude -Iarch/arm/mach-exynos/include
 @ -Iarch/arm/plat-s5p/include -Iarch/arm/plat-samsung/include -imultilib
 @ armv7-a -iprefix
-@ /home/sjkoon/Perseus-S3/toolchain/arm-eabi-4/bin/../lib/gcc/arm-linux-androideabi/4.4.3/
+@ /home/sjkoon/SJKernel-Gn2/toolchain/arm-eabi-4/bin/../lib/gcc/arm-linux-androideabi/4.4.3/
 @ -D__KERNEL__ -D__LINUX_ARM_ARCH__=7 -Uarm -DKBUILD_STR(s)=#s
 @ -DKBUILD_BASENAME=KBUILD_STR(bounds) -DKBUILD_MODNAME=KBUILD_STR(bounds)
 @ -isystem
-@ /home/sjkoon/Perseus-S3/toolchain/arm-eabi-4/bin/../lib/gcc/arm-linux-androideabi/4.4.3/include
+@ /home/sjkoon/SJKernel-Gn2/toolchain/arm-eabi-4/bin/../lib/gcc/arm-linux-androideabi/4.4.3/include
 @ -include include/generated/autoconf.h -MD kernel/.bounds.s.d
 @ kernel/bounds.c -mbionic -fpic -mlittle-endian -mfpu=neon -march=armv7-a
 @ -mtune=cortex-a9 -marm -mapcs -mno-sched-prolog -mabi=aapcs-linux
@@ -553,6 +553,8 @@ foo:
 	.ascii	"PG_swapcache\000"
 .LASF41:
 	.ascii	"zone_type\000"
+.LASF56:
+	.ascii	"/home/sjkoon/SJKernel-Gn2\000"
 .LASF7:
 	.ascii	"long unsigned int\000"
 .LASF50:
@@ -567,8 +569,6 @@ foo:
 	.ascii	"kernel/bounds.c\000"
 .LASF26:
 	.ascii	"PG_tail\000"
-.LASF56:
-	.ascii	"/home/sjkoon/Perseus-S3\000"
 .LASF40:
 	.ascii	"pageflags\000"
 .LASF46:

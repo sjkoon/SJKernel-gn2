@@ -27,8 +27,6 @@ kernel/crypto/crypto_hash.ko
 kernel/crypto/pcompress.ko
 kernel/crypto/cryptomgr.ko
 kernel/crypto/hmac.ko
-kernel/crypto/xcbc.ko
-kernel/crypto/crypto_null.ko
 kernel/crypto/md4.ko
 kernel/crypto/md5.ko
 kernel/crypto/sha1_generic.ko
@@ -375,14 +373,11 @@ kernel/net/bluetooth_mgmt/hidp/hidp.ko
 kernel/net/bluetooth_mgmt/rfcomm/rfcomm.ko
 kernel/net/dns_resolver/dns_resolver.ko
 kernel/net/ipv4/esp4.ko
-kernel/net/ipv4/ipcomp.ko
-kernel/net/ipv4/xfrm4_tunnel.ko
 kernel/net/ipv4/tunnel4.ko
 kernel/net/ipv4/xfrm4_mode_transport.ko
 kernel/net/ipv4/xfrm4_mode_tunnel.ko
 kernel/net/ipv4/inet_diag.ko
 kernel/net/ipv4/tcp_diag.ko
-kernel/net/ipv4/tcp_bic.ko
 kernel/net/ipv4/tcp_cubic.ko
 kernel/net/ipv4/netfilter/nf_conntrack_ipv4.ko
 kernel/net/ipv4/netfilter/nf_nat.ko
@@ -499,7 +494,6 @@ kernel/net/sched/cls_u32.ko
 kernel/net/sched/em_u32.ko
 kernel/net/unix/unix.ko
 kernel/net/wireless/cfg80211.ko
-kernel/net/xfrm/xfrm_user.ko
 kernel/net/xfrm/xfrm_ipcomp.ko
 kernel/lib/bitrev.ko
 kernel/lib/crc-ccitt.ko

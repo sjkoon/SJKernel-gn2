@@ -9,8 +9,6 @@ kernel/crypto/crypto_hash.ko
 kernel/crypto/pcompress.ko
 kernel/crypto/cryptomgr.ko
 kernel/crypto/hmac.ko
-kernel/crypto/xcbc.ko
-kernel/crypto/crypto_null.ko
 kernel/crypto/md4.ko
 kernel/crypto/md5.ko
 kernel/crypto/sha1_generic.ko

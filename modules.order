@@ -5,5 +5,3 @@ kernel/fs/cifs/cifs.ko
 kernel/drivers/scsi/scsi_wait_scan.ko
 kernel/drivers/net/wireless/bcmdhd/dhd.ko
 kernel/drivers/net/wireless/btlock/btlock.ko
-kernel/net/ipv4/tcp_westwood.ko
-kernel/net/ipv4/tcp_htcp.ko

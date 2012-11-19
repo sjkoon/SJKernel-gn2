@@ -1,1 +1,1 @@
-cmd_drivers/motor/built-in.o :=  /home/sjkoon/Perseus-S3/toolchain/arm-eabi-4/bin/arm-linux-androideabi-ld -EL    -r -o drivers/motor/built-in.o drivers/motor/max77693_haptic.o drivers/motor/vibrator.o 
+cmd_drivers/motor/built-in.o :=  /home/sjkoon/SJKernel-Gn2/toolchain/arm-eabi-4/bin/arm-linux-androideabi-ld -EL    -r -o drivers/motor/built-in.o drivers/motor/max77693_haptic.o drivers/motor/vibrator.o 

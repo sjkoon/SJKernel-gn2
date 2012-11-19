@@ -1,1 +1,1 @@
-cmd_arch/arm/mvp/pvtcpkm/pvtcpkm.ko := /home/sjkoon/Perseus-S3/toolchain/arm-eabi-4/bin/arm-linux-androideabi-ld -EL -r  -T /home/sjkoon/Perseus-S3/scripts/module-common.lds --build-id  -o arch/arm/mvp/pvtcpkm/pvtcpkm.ko arch/arm/mvp/pvtcpkm/pvtcpkm.o arch/arm/mvp/pvtcpkm/pvtcpkm.mod.o
+cmd_arch/arm/mvp/pvtcpkm/pvtcpkm.ko := /home/sjkoon/SJKernel-Gn2/toolchain/arm-eabi-4/bin/arm-linux-androideabi-ld -EL -r  -T /home/sjkoon/SJKernel-Gn2/scripts/module-common.lds --build-id  -o arch/arm/mvp/pvtcpkm/pvtcpkm.ko arch/arm/mvp/pvtcpkm/pvtcpkm.o arch/arm/mvp/pvtcpkm/pvtcpkm.mod.o
