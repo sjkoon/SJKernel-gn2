@@ -1,0 +1,1 @@
+cmd_drivers/media/video/exynos/built-in.o :=  /home/sjkoon/Perseus-S3/toolchain/arm-eabi-4/bin/arm-linux-androideabi-ld -EL    -r -o drivers/media/video/exynos/built-in.o drivers/media/video/exynos/mdev/built-in.o drivers/media/video/exynos/fimc-lite/built-in.o drivers/media/video/exynos/fimc-is/built-in.o drivers/media/video/exynos/rotator/built-in.o 

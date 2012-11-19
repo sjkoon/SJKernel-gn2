@@ -1,0 +1,1 @@
+cmd_arch/arm/mvp/mvpkm/mvpkm.ko := /home/sjkoon/Perseus-S3/toolchain/arm-eabi-4/bin/arm-linux-androideabi-ld -EL -r  -T /home/sjkoon/Perseus-S3/scripts/module-common.lds --build-id  -o arch/arm/mvp/mvpkm/mvpkm.ko arch/arm/mvp/mvpkm/mvpkm.o arch/arm/mvp/mvpkm/mvpkm.mod.o

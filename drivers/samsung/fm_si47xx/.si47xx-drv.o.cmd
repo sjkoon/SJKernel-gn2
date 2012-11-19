@@ -1,0 +1,1 @@
+cmd_drivers/samsung/fm_si47xx/si47xx-drv.o := /home/sjkoon/Perseus-S3/toolchain/arm-eabi-4/bin/arm-linux-androideabi-ld -EL    -r -o drivers/samsung/fm_si47xx/si47xx-drv.o drivers/samsung/fm_si47xx/Si47xx_i2c_drv.o drivers/samsung/fm_si47xx/Si47xx_dev.o 

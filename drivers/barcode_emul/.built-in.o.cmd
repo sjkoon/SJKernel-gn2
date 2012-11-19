@@ -1,0 +1,1 @@
+cmd_drivers/barcode_emul/built-in.o :=  /home/sjkoon/Perseus-S3/toolchain/arm-eabi-4/bin/arm-linux-androideabi-ld -EL    -r -o drivers/barcode_emul/built-in.o drivers/barcode_emul/barcode_emul_ice4.o 

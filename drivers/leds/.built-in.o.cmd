@@ -1,0 +1,1 @@
+cmd_drivers/leds/built-in.o :=  /home/sjkoon/Perseus-S3/toolchain/arm-eabi-4/bin/arm-linux-androideabi-ld -EL    -r -o drivers/leds/built-in.o drivers/leds/led-core.o drivers/leds/led-class.o drivers/leds/leds-max77693.o drivers/leds/leds-an30259a.o 

@@ -1,0 +1,1 @@
+cmd_drivers/media/tdmb/built-in.o :=  /home/sjkoon/Perseus-S3/toolchain/arm-eabi-4/bin/arm-linux-androideabi-ld -EL    -r -o drivers/media/tdmb/built-in.o drivers/media/tdmb/tdmb.o drivers/media/tdmb/tdmb_data.o drivers/media/tdmb/tdmb_port_fc8050.o drivers/media/tdmb/fc8050/built-in.o drivers/media/tdmb/tdmb_spi.o 

@@ -1,0 +1,1 @@
+cmd_drivers/net/wireless/bcmdhd/dhd.ko := /home/sjkoon/Perseus-S3/toolchain/arm-eabi-4/bin/arm-linux-androideabi-ld -EL -r  -T /home/sjkoon/Perseus-S3/scripts/module-common.lds --build-id  -o drivers/net/wireless/bcmdhd/dhd.ko drivers/net/wireless/bcmdhd/dhd.o drivers/net/wireless/bcmdhd/dhd.mod.o

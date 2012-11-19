@@ -1,0 +1,1 @@
+cmd_drivers/media/video/samsung/ump/built-in.o :=  /home/sjkoon/Perseus-S3/toolchain/arm-eabi-4/bin/arm-linux-androideabi-ld -EL    -r -o drivers/media/video/samsung/ump/built-in.o drivers/media/video/samsung/ump/ump.o 

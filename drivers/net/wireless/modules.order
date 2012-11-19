@@ -1,0 +1,2 @@
+kernel/drivers/net/wireless/bcmdhd/dhd.ko
+kernel/drivers/net/wireless/btlock/btlock.ko
