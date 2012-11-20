@@ -1,1 +1,0 @@
-cmd_fs/partitions/built-in.o :=  /home/sjkoon/SJKernel-Gn2/toolchain/arm-eabi-4/bin/arm-linux-androideabi-ld -EL    -r -o fs/partitions/built-in.o fs/partitions/check.o fs/partitions/msdos.o fs/partitions/efi.o 

@@ -1,1 +1,0 @@
-cmd_net/bluetooth_mgmt/bnep/bnep.o := /home/sjkoon/SJKernel-Gn2/toolchain/arm-eabi-4/bin/arm-linux-androideabi-ld -EL    -r -o net/bluetooth_mgmt/bnep/bnep.o net/bluetooth_mgmt/bnep/core.o net/bluetooth_mgmt/bnep/sock.o net/bluetooth_mgmt/bnep/netdev.o 

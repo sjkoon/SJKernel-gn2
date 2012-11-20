@@ -1,1 +1,0 @@
-cmd_drivers/net/usb/built-in.o :=  /home/sjkoon/SJKernel-Gn2/toolchain/arm-eabi-4/bin/arm-linux-androideabi-ld -EL    -r -o drivers/net/usb/built-in.o drivers/net/usb/asix.o drivers/net/usb/cdc_ether.o drivers/net/usb/net1080.o drivers/net/usb/cdc_subset.o drivers/net/usb/zaurus.o drivers/net/usb/usbnet.o drivers/net/usb/cdc_ncm.o drivers/net/usb/rmnet_usb.o 

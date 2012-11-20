@@ -1,1 +1,0 @@
-cmd_fs/cifs/cifs.ko := /home/sjkoon/SJKernel-Gn2/toolchain/arm-eabi-4/bin/arm-linux-androideabi-ld -EL -r  -T /home/sjkoon/SJKernel-Gn2/scripts/module-common.lds --build-id  -o fs/cifs/cifs.ko fs/cifs/cifs.o fs/cifs/cifs.mod.o

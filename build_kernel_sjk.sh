@@ -3,16 +3,20 @@ export KERNELDIR=`readlink -f .`
 export RAMFS_SOURCE=`readlink -f $KERNELDIR/initrd_$1`
 export PARENT_DIR=`readlink -f ..`
 export USE_SEC_FIPS_MODE=true
-export CROSS_COMPILE=$KERNELDIR/toolchain/arm-eabi-4/bin/arm-linux-androideabi-
+export SMB_DIR=smb://sjk-pc/boot_skt_jb/
+export CROSS_COMPILE=$KERNELDIR/toolchain/arm-linux-gnueabihf-4.7/bin/arm-linux-gnueabihf-
 
 RAMFS_TMP="/tmp/ramfs-source"
 
 export ARCH=arm
 
+#if [ ! -f $KERNELDIR/.config ];
+#then
+  make sjkernel_e250_$1_defconfig
+#fi
 
 cd $KERNELDIR/
-make sjkernel_e250_$1_defconfig
-nice -n 10 make -j4 -ofast USE_CCACHE=1 || exit 1
+nice -n 10 make -j4 USE_CCACHE=1 || exit 1
 #remove previous ramfs files
 rm -rf $RAMFS_TMP
 rm -rf $RAMFS_TMP.cpio
@@ -29,7 +33,7 @@ rm -rf $RAMFS_TMP/.hg
 #copy modules into ramfs
 mkdir -p $INITRAMFS/lib/modules
 find -name '*.ko' -exec cp -av {} $RAMFS_TMP/lib/modules/ \;
-$KERNELDIR/toolchain/arm-eabi-4/bin/arm-linux-androideabi-strip --strip-unneeded $RAMFS_TMP/lib/modules/*
+$KERNELDIR/toolchain/arm-linux-gnueabihf-4.7/bin/arm-linux-gnueabihf-strip --strip-unneeded $RAMFS_TMP/lib/modules/*
 
 cd $RAMFS_TMP
 find | fakeroot cpio -H newc -o > $RAMFS_TMP.cpio 2>/dev/null
@@ -43,6 +47,7 @@ nice -n 10 make -j3 USE_CCACHE=1 zImage || exit 1
 
 $KERNELDIR/mkshbootimg.py $KERNELDIR/boot.img $KERNELDIR/boot.img.pre $KERNELDIR/payload.tar
 rm -f $KERNELDIR/boot.img.pre
-rm -f $DROPBOXDIR/boot.tar
-rm -f $KERNELDIR/boot.tar
-tar cvf boot.tar boot.img
+#rm -f $DROPBOXDIR/boot.tar
+rm -f $KERNELDIR/sjkernel_$1.tar
+tar cvf sjkernel_$1.tar boot.img
+mv sjkernel_$1.tar $SMB_DIR

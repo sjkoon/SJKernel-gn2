@@ -1,1 +1,0 @@
-cmd_drivers/net/wireless/btlock/btlock.ko := /home/sjkoon/SJKernel-Gn2/toolchain/arm-eabi-4/bin/arm-linux-androideabi-ld -EL -r  -T /home/sjkoon/SJKernel-Gn2/scripts/module-common.lds --build-id  -o drivers/net/wireless/btlock/btlock.ko drivers/net/wireless/btlock/btlock.o drivers/net/wireless/btlock/btlock.mod.o

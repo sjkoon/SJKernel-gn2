@@ -1,1 +1,0 @@
-cmd_drivers/spi/built-in.o :=  /home/sjkoon/SJKernel-Gn2/toolchain/arm-eabi-4/bin/arm-linux-androideabi-ld -EL    -r -o drivers/spi/built-in.o drivers/spi/spi.o drivers/spi/spi_bitbang.o drivers/spi/spi_gpio.o drivers/spi/spi_s3c64xx.o drivers/spi/spidev.o 

@@ -1,1 +1,0 @@
-cmd_arch/arm/mvp/mvpkm/mvpkm.ko := /home/sjkoon/SJKernel-Gn2/toolchain/arm-eabi-4/bin/arm-linux-androideabi-ld -EL -r  -T /home/sjkoon/SJKernel-Gn2/scripts/module-common.lds --build-id  -o arch/arm/mvp/mvpkm/mvpkm.ko arch/arm/mvp/mvpkm/mvpkm.o arch/arm/mvp/mvpkm/mvpkm.mod.o
