@@ -1,6 +1,6 @@
 #!/bin/sh
 export KERNELDIR=`readlink -f .`
-export RAMFS_SOURCE=`readlink -f $KERNELDIR/initrd_$1`
+export RAMFS_SOURCE=`readlink -f $KERNELDIR/../initrd_$1`
 export PARENT_DIR=`readlink -f ..`
 export USE_SEC_FIPS_MODE=true
 export SMB_DIR=smb://sjk-pc/boot_skt_jb/
