@@ -4,7 +4,7 @@ export RAMFS_SOURCE=`readlink -f $KERNELDIR/../initrd/initrd_$1`
 export PARENT_DIR=`readlink -f ..`
 export USE_SEC_FIPS_MODE=true
 export SMB_DIR=smb://sjk-pc/boot_skt_jb/
-export CROSS_COMPILE=$KERNELDIR/toolchain/arm-linux-gnueabihf-4.7/bin/arm-linux-gnueabihf-
+export CROSS_COMPILE=$KERNELDIR/../toolchain/arm-linux-gnueabihf-4.7/bin/arm-linux-gnueabihf-
 
 RAMFS_TMP="/tmp/ramfs-source"
 
@@ -33,7 +33,7 @@ rm -rf $RAMFS_TMP/.hg
 #copy modules into ramfs
 mkdir -p $INITRAMFS/lib/modules
 find -name '*.ko' -exec cp -av {} $RAMFS_TMP/lib/modules/ \;
-$KERNELDIR/toolchain/arm-linux-gnueabihf-4.7/bin/arm-linux-gnueabihf-strip --strip-unneeded $RAMFS_TMP/lib/modules/*
+$KERNELDIR/../toolchain/arm-linux-gnueabihf-4.7/bin/arm-linux-gnueabihf-strip --strip-unneeded $RAMFS_TMP/lib/modules/*
 
 cd $RAMFS_TMP
 find | fakeroot cpio -H newc -o > $RAMFS_TMP.cpio 2>/dev/null
