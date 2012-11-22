@@ -676,8 +676,17 @@ static irqreturn_t touchkey_interrupt(int irq, void *dev_id)
 	retry = 3;
 	while (retry--) {
 		ret = i2c_touchkey_read(tkey_i2c->client, KEYCODE_REG, data, 3);
-		if (!ret)
+		if (!ret) {
+			keycode_type = (data[0] & TK_BIT_KEYCODE);
+			if (keycode_type <= 0
+				|| keycode_type >= touchkey_count) {
+				printk(KERN_DEBUG "[Touchkey] keycode_type err"
+					" ret:%d, retry: %d\n",
+					keycode_type, retry);
+				continue;
+			}
 			break;
+		}
 		else {
 			printk(KERN_DEBUG
 			       "[TouchKey] i2c read failed, ret:%d, retry: %d\n",
@@ -694,7 +703,15 @@ static irqreturn_t touchkey_interrupt(int irq, void *dev_id)
 	pressed = !(data[0] & TK_BIT_PRESS_EV);
 
 	if (keycode_type <= 0 || keycode_type >= touchkey_count) {
-		printk(KERN_DEBUG "[Touchkey] keycode_type err\n");
+		int i;
+		printk(KERN_DEBUG "[Touchkey] keycode_type err %d."
+			" Release all keys\n", keycode_type);
+		/* release keys */
+		for (i = 1; i < touchkey_count; ++i) {
+			input_report_key(tkey_i2c->input_dev,
+				touchkey_keycode[i], 0);
+		}
+		input_sync(tkey_i2c->input_dev);
 		return IRQ_HANDLED;
 	}
 
@@ -702,7 +719,7 @@ static irqreturn_t touchkey_interrupt(int irq, void *dev_id)
 		set_touchkey_debug('P');
 
 	if (get_tsp_status() && pressed)
-		printk(KERN_DEBUG "[TouchKey] touchkey pressed but don't send event because touch is pressed.\n");
+		printk(KERN_DEBUG "[TouchKey] touch is pressed. Pass touchkey event\n");
 	else {
 		input_report_key(tkey_i2c->input_dev,
 				 touchkey_keycode[keycode_type], pressed);

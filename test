@@ -1,0 +1,51 @@
+	case CABLE_TYPE_TA_MUIC:
+			info->cable_type = CABLE_TYPE_TA_MUIC;
+				info->cable_type = CABLE_TYPE_TA_MUIC;
+	case CABLE_TYPE_TA_MUIC:
+			info->cable_type = CABLE_TYPE_TA_MUIC;
+		charger_type = CABLE_TYPE_TA;
+		case CABLE_TYPE_TA:
+enum cable_type_t {
+	enum cable_type_t cable_type;
+enum cable_type_t {
+enum cable_type_t {
+enum cable_type_t {
+	enum cable_type_t cable_type;
+		case CABLE_TYPE_TA:
+extern cable_type_t max77693_muic_get_attached_device(void);
+				pr_info("%s : cable_type_t = %d", __func__, type);
+	case CABLE_TYPE_TA:
+	case CABLE_TYPE_TA_MUIC:
+	case CABLE_TYPE_TA:
+	case CABLE_TYPE_TA:
+} cable_type_t;
+	case CABLE_TYPE_TA_MUIC:
+			info->cable_type = CABLE_TYPE_TA_MUIC;
+				info->cable_type = CABLE_TYPE_TA_MUIC;
+	case CABLE_TYPE_TA_MUIC:
+			info->cable_type = CABLE_TYPE_TA_MUIC;
+		charger_type = CABLE_TYPE_TA;
+		case CABLE_TYPE_TA:
+enum cable_type_t {
+	enum cable_type_t cable_type;
+enum cable_type_t {
+enum cable_type_t {
+enum cable_type_t {
+	enum cable_type_t cable_type;
+		case CABLE_TYPE_TA:
+extern cable_type_t max77693_muic_get_attached_device(void);
+				pr_info("%s : cable_type_t = %d", __func__, type);
+	case CABLE_TYPE_TA:
+	case CABLE_TYPE_TA_MUIC:
+	case CABLE_TYPE_TA:
+	case CABLE_TYPE_TA:
+} cable_type_t;
+enum cable_type_t {
+	enum cable_type_t cable_type;
+enum cable_type_t {
+enum cable_type_t {
+enum cable_type_t {
+	enum cable_type_t cable_type;
+extern cable_type_t max77693_muic_get_attached_device(void);
+				pr_info("%s : cable_type_t = %d", __func__, type);
+} cable_type_t;

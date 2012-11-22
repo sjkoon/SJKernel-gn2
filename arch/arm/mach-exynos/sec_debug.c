@@ -31,6 +31,8 @@
 #include <plat/map-s5p.h>
 #include <asm/mach/map.h>
 #include <plat/regs-watchdog.h>
+#include <linux/seq_file.h>
+#include <linux/mfd/max77693-private.h>
 
 #if defined(CONFIG_SEC_MODEM_P8LTE)
 #include <linux/miscdevice.h>
@@ -121,6 +123,35 @@ struct rwsem_debug {
  */
 #define SEC_DEBUG_MAGIC_PA S5P_PA_SDRAM
 #define SEC_DEBUG_MAGIC_VA phys_to_virt(SEC_DEBUG_MAGIC_PA)
+
+#if 0	/* onlyjazz : org */
+
+enum sec_debug_reset_reason_t {
+	RR_S = 1,
+	RR_W = 2,
+	RR_D = 3,
+	RR_N = 4,
+	RR_P = 5
+};
+
+#else	/* onlyjazz : leave reset reason in detail */
+
+enum sec_debug_reset_reason_t {
+
+	RR_S = 1,
+	RR_W = 2,
+	RR_D = 3,
+	RR_K = 4,
+	RR_M = 5,
+	RR_P = 6,
+	RR_R = 7,
+	RR_B = 8,
+	RR_N = 9,
+};
+
+#endif	/* onlyjazz : end */
+
+extern cable_type_t max77693_muic_get_attached_device(void);
 
 enum sec_debug_upload_cause_t {
 	UPLOAD_CAUSE_INIT = 0xCAFEBABE,
@@ -221,7 +252,9 @@ struct sec_debug_core_t {
  * The other cases are not considered
  */
 union sec_debug_level_t sec_debug_level = { .en.kernel_fault = 1, };
+static unsigned reset_reason = RR_N;
 
+module_param_named(reset_reason, reset_reason, uint, 0644);
 module_param_named(enable, sec_debug_level.en.kernel_fault, ushort, 0644);
 module_param_named(enable_user, sec_debug_level.en.user_fault, ushort, 0644);
 module_param_named(level, sec_debug_level.uint_val, uint, 0644);
@@ -614,14 +647,21 @@ module_exit(sec_cp_upload_exit);
 static int sec_debug_panic_handler(struct notifier_block *nb,
 				   unsigned long l, void *buf)
 {
-	if (!sec_debug_level.en.kernel_fault)
-		return -1;
+	cable_type_t  type = max77693_muic_get_attached_device();
+
+	if ((type != CABLE_TYPE_JIG_UART_OFF_MUIC ||
+		type != CABLE_TYPE_JIG_UART_OFF_VB_MUIC) && (strcmp(buf, "Commercial Dump")))
+		if (!sec_debug_level.en.kernel_fault)
+			return -1;
 
 	local_irq_disable();
 
 	sec_debug_set_upload_magic(0x66262564, buf);
 
-	if (!strcmp(buf, "User Fault"))
+	if ((type == CABLE_TYPE_JIG_UART_OFF_MUIC ||
+			type == CABLE_TYPE_JIG_UART_OFF_VB_MUIC) && (!strcmp(buf, "Commercial Dump")))
+		sec_debug_set_upload_cause(UPLOAD_CAUSE_FORCED_UPLOAD);
+	else if (!strcmp(buf, "User Fault"))
 		sec_debug_set_upload_cause(UPLOAD_CAUSE_USER_FAULT);
 	else if (!strcmp(buf, "Crash Key"))
 		sec_debug_set_upload_cause(UPLOAD_CAUSE_FORCED_UPLOAD);
@@ -673,9 +713,16 @@ int sec_debug_panic_handler_safe(void *buf)
 static void dump_state_and_upload(void);
 #endif
 
+#define LOCKUP_FIRST_KEY KEY_VOLUMEUP
+#define LOCKUP_SECOND_KEY KEY_POWER
+#define LOCKUP_THIRD_KEY KEY_POWER
+#define LOCKUP_EXTRA_KEY KEY_VOLUMEDOWN
+
 #if !defined(CONFIG_TARGET_LOCALE_NA)
 void sec_debug_check_crash_key(unsigned int code, int value)
 {
+	static enum { NONE, STEP1, STEP2, STEP3, STEP4, STEP5, STEP6, STEP7, STEP8, STEP9, STEP10} state = NONE;
+
 	static bool volup_p;
 	static bool voldown_p;
 	static int loopcount;
@@ -697,8 +744,69 @@ void sec_debug_check_crash_key(unsigned int code, int value)
 	static const unsigned int VOLUME_DOWN = KEY_VOLUMEDOWN;
 #endif
 
-	if (!sec_debug_level.en.kernel_fault)
+	if (!sec_debug_level.en.kernel_fault) {
+        switch (state)
+		{
+		case NONE:
+			state = (code == LOCKUP_FIRST_KEY && value) ? STEP1 : NONE;
+			pr_info("%s:NONE user upload key (%d)", __func__, state);
+			break;
+		case STEP1:
+			state = (code == LOCKUP_EXTRA_KEY && value) ? STEP2 : NONE;
+			pr_info("%s:STEP1 user upload key (%d)", __func__, state);
+			break;
+		case STEP2:
+			state = (code == LOCKUP_FIRST_KEY && !value) ? STEP3 : NONE;
+			pr_info("%s:STEP2 user upload key (%d)", __func__, state);
+			break;
+		case STEP3:
+			state = (code == LOCKUP_FIRST_KEY && value) ? STEP4 : NONE;
+			pr_info("%s:STEP3 user upload key (%d)", __func__, state);
+			break;
+		case STEP4:
+			state = (code == LOCKUP_FIRST_KEY && !value) ? STEP5 : NONE;
+			pr_info("%s:STEP4 user upload key (%d)", __func__, state);
+			break;
+		case STEP5:
+			state = (code == LOCKUP_FIRST_KEY && value) ? STEP6 : NONE;
+			pr_info("%s:STEP5 user upload key (%d)", __func__, state);
+			break;
+		case STEP6:
+			state = (code == LOCKUP_EXTRA_KEY && !value) ? STEP7 : NONE;
+			pr_info("%s:STEP6 user upload key (%d)", __func__, state);
+			break;
+		case STEP7:
+			state = (code == LOCKUP_EXTRA_KEY && value) ? STEP8 : NONE;
+			pr_info("%s:STEP7 user upload key (%d)", __func__, state);
+			break;
+		case STEP8:
+			state = (code == LOCKUP_EXTRA_KEY && !value) ? STEP9 : NONE;
+			pr_info("%s:STEP8 user upload key (%d)", __func__, state);			
+			break;
+		case STEP9:
+			state = (code == LOCKUP_EXTRA_KEY && value) ? STEP10 : NONE;
+			pr_info("%s:STEP9 user upload key (%d)", __func__, state);
+			break;
+		case STEP10:
+			pr_info("%s:STEP10 user upload key (%d)", __func__, state);
+			if (code == LOCKUP_THIRD_KEY && value) 
+			{
+				cable_type_t  type = max77693_muic_get_attached_device();
+				pr_info("%s : cable_type_t = %d", __func__, type);
+				if (type == CABLE_TYPE_JIG_UART_OFF_MUIC ||
+					type == CABLE_TYPE_JIG_UART_OFF_VB_MUIC) {
+					panic("Commercial Dump");
+				}
+			}
+			else
+				state = NONE;
+
+			break;
+		default:
+			break;
+		}
 		return;
+    }
 
 	/* Must be deleted later */
 #if defined(CONFIG_MACH_MIDAS) || defined(CONFIG_SLP)
@@ -1163,6 +1271,75 @@ static int __init sec_debug_user_fault_init(void)
 
 device_initcall(sec_debug_user_fault_init);
 #endif
+
+static int set_reset_reason_proc_show(struct seq_file *m, void *v)
+{
+	printk("%s : %d", __func__, reset_reason);
+
+#if 0	/* onlyjazz : org */
+
+	if (reset_reason == RR_S)
+		seq_printf(m, "SPON\n");
+	else if(reset_reason == RR_W)
+		seq_printf(m, "WPON\n");
+	else if(reset_reason == RR_D)
+		seq_printf(m, "DPON\n");
+        else if(reset_reason == RR_P)
+		seq_printf(m, "PPON\n");
+	else
+		seq_printf(m, "NPON\n");
+
+#else	/* onlyjazz : leave reset reason in detail */
+
+	if (reset_reason == RR_S)
+		seq_printf(m, "SPON\n");
+	else if(reset_reason == RR_W)
+		seq_printf(m, "WPON\n");
+	else if(reset_reason == RR_D)
+		seq_printf(m, "DPON\n");
+        else if(reset_reason == RR_K)
+		seq_printf(m, "KPON\n");
+        else if(reset_reason == RR_M)
+		seq_printf(m, "MPON\n");
+        else if(reset_reason == RR_P)
+		seq_printf(m, "PPON\n");
+        else if(reset_reason == RR_R)
+		seq_printf(m, "RPON\n");
+        else if(reset_reason == RR_B)
+		seq_printf(m, "BPON\n");
+	else
+		seq_printf(m, "NPON\n");
+
+#endif	/* onlyjazz : end */
+
+	return 0;
+}
+
+static int sec_reset_reason_proc_open(struct inode *inode, struct file *file)
+{
+	return single_open(file, set_reset_reason_proc_show, NULL);
+}
+
+static const struct file_operations sec_reset_reason_proc_fops = {
+	.open		= sec_reset_reason_proc_open,
+	.read		= seq_read,
+	.llseek		= seq_lseek,
+	.release	= single_release,
+};
+
+static int __init sec_debug_reset_reason_init(void)
+{
+	struct proc_dir_entry *entry;
+
+	entry = proc_create("reset_reason", S_IWUGO, NULL,
+			    &sec_reset_reason_proc_fops);
+	if (!entry)
+		return -ENOMEM;
+
+	return 0;
+}
+
+device_initcall(sec_debug_reset_reason_init);
 
 int sec_debug_magic_init(void)
 {

@@ -4,6 +4,7 @@
 #include <linux/kernel.h>
 #include <linux/module.h>
 #include <linux/init.h>
+#include <linux/bitmap.h>
 #include <linux/bio.h>
 #include <linux/blkdev.h>
 #include <linux/bootmem.h>	/* for max_pfn/max_low_pfn */
@@ -16,13 +17,12 @@
  */
 static struct kmem_cache *iocontext_cachep;
 
-static void cfq_dtor(struct io_context *ioc)
+static void hlist_sched_dtor(struct io_context *ioc, struct hlist_head *list)
 {
-	if (!hlist_empty(&ioc->cic_list)) {
+	if (!hlist_empty(list)) {
 		struct cfq_io_context *cic;
 
-		cic = hlist_entry(ioc->cic_list.first, struct cfq_io_context,
-								cic_list);
+		cic = hlist_entry(list->first, struct cfq_io_context, cic_list);
 		cic->dtor(ioc);
 	}
 }

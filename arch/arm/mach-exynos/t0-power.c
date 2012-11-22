@@ -822,4 +822,3 @@ void midas_power_init(void)
 {
 	printk(KERN_INFO "%s\n", __func__);
 }
-

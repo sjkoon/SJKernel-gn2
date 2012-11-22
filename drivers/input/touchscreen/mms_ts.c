@@ -16,8 +16,8 @@
 
 #define DEBUG
 /* #define VERBOSE_DEBUG */
-/* #define SEC_TSP_DEBUG */
-#define SEC_TSP_VERBOSE_DEBUG
+/*#define SEC_TSP_DEBUG*/
+/* #define SEC_TSP_VERBOSE_DEBUG */
 
 /* #define FORCE_FW_FLASH */
 /* #define FORCE_FW_PASS */
@@ -49,10 +49,6 @@
 #include <linux/platform_data/mms_ts.h>
 
 #include <asm/unaligned.h>
-
-#ifdef CONFIG_CPU_FREQ_GOV_ONDEMAND_FLEXRATE
-#include <mach/midas-tsp.h>
-#endif
 
 #define MAX_FINGERS		10
 #define MAX_WIDTH		30
@@ -132,15 +128,11 @@ enum {
 /* Touch booster */
 #if defined(CONFIG_EXYNOS4_CPUFREQ) &&\
 	defined(CONFIG_BUSFREQ_OPP)
-#define TOUCH_BOOSTER			0
+#define TOUCH_BOOSTER			1
 #define TOUCH_BOOSTER_OFF_TIME		100
 #define TOUCH_BOOSTER_CHG_TIME		200
 #else
 #define TOUCH_BOOSTER			0
-#endif
-
-#ifdef CONFIG_CPU_FREQ_LCD_FREQ_DFS
-extern void _lcdfreq_lock(int lock);
 #endif
 
 struct device *sec_touchscreen;
@@ -405,7 +397,7 @@ static void set_dvfs_off(struct work_struct *work)
 
 	exynos_cpufreq_lock_free(DVFS_LOCK_ID_TSP);
 	info->dvfs_lock_status = false;
-	pr_debug("[TSP] DVFS Off!");
+	pr_info("[TSP] DVFS Off!");
 	mutex_unlock(&info->dvfs_lock);
 	}
 
@@ -446,7 +438,7 @@ static void set_dvfs_lock(struct mms_ts_info *info, uint32_t on)
 				msecs_to_jiffies(TOUCH_BOOSTER_CHG_TIME));
 
 			info->dvfs_lock_status = true;
-			pr_debug("[TSP] DVFS On![%d]", info->cpufreq_level);
+			pr_info("[TSP] DVFS On![%d]", info->cpufreq_level);
 		}
 	} else if (on == 2) {
 		cancel_delayed_work(&info->work_dvfs_off);
@@ -507,7 +499,7 @@ static void release_all_fingers(struct mms_ts_info *info)
 	input_sync(info->input_dev);
 #if TOUCH_BOOSTER
 	set_dvfs_lock(info, 2);
-	pr_debug("[TSP] dvfs_lock free.\n ");
+	pr_info("[TSP] dvfs_lock free.\n ");
 #endif
 }
 
@@ -688,22 +680,15 @@ static irqreturn_t mms_ts_interrupt(int irq, void *dev_id)
 				, angle, palm);
 #else
 			if (info->finger_state[id] != 0) {
-#if defined(SEC_TSP_EVENT_DEBUG) && defined(CONFIG_TARGET_LOCALE_KOR)
-				printk(KERN_DEBUG "[TSP] POS[%d](%4d,%4d)[U] tp = %d\n",
-					id, x, y, touch_is_pressed);
-//#else
 				dev_notice(&client->dev,
 					"finger [%d] up, palm %d\n", id, palm);
-#endif
 			}
 #endif
 			input_mt_slot(info->input_dev, id);
 			input_mt_report_slot_state(info->input_dev,
 						   MT_TOOL_FINGER, false);
 
-#if defined(SEC_TSP_DEBUG) || defined(SEC_TSP_VERBOSE_DEBUG)
 			info->finger_state[id] = 0;
-#endif
 			continue;
 		}
 
@@ -718,10 +703,9 @@ static irqreturn_t mms_ts_interrupt(int irq, void *dev_id)
 		input_report_abs(info->input_dev, ABS_MT_ANGLE, angle);
 		input_report_abs(info->input_dev, ABS_MT_PALM, palm);
 
-#if defined(SEC_TSP_DEBUG) || defined(SEC_TSP_VERBOSE_DEBUG)
+#if defined(SEC_TSP_DEBUG)
 		if (info->finger_state[id] == 0) {
 			info->finger_state[id] = 1;
-#if defined(SEC_TSP_DEBUG)
 			dev_dbg(&client->dev,
 				"finger id[%d]: x=%d y=%d w=%d major=%d minor=%d angle=%d palm=%d\n",
 				id, x, y, tmp[4], tmp[6], tmp[7]
@@ -730,22 +714,14 @@ static irqreturn_t mms_ts_interrupt(int irq, void *dev_id)
 			if (finger_event_sz == 10)
 				dev_dbg(&client->dev, \
 					"pressure = %d\n", tmp[8]);
-#endif
 		}
-#if defined(SEC_TSP_DEBUG)
+#else
 		if (info->finger_state[id] == 0) {
 			info->finger_state[id] = 1;
-#if defined(SEC_TSP_EVENT_DEBUG) && defined(CONFIG_TARGET_LOCALE_KOR)
-			printk(KERN_DEBUG "[TSP] POS[%d](%4d,%4d)[D] tp = %d\n",
-					id, x, y, touch_is_pressed);
-#else
 			dev_notice(&client->dev,
 				"finger [%d] down, palm %d\n", id, palm);
-#endif
 		}
 #endif
-#endif
-
 	}
 	input_sync(info->input_dev);
 	touch_is_pressed = 0;
@@ -758,19 +734,6 @@ static irqreturn_t mms_ts_interrupt(int irq, void *dev_id)
 #if TOUCH_BOOSTER
 	set_dvfs_lock(info, !!touch_is_pressed);
 #endif
-
-#ifdef CONFIG_CPU_FREQ_LCD_FREQ_DFS
-	if(!!touch_is_pressed){
-		_lcdfreq_lock(0);
-	}
-#endif
-
-#ifdef CONFIG_CPU_FREQ_GOV_ONDEMAND_FLEXRATE
-	if(!!touch_is_pressed){
-		midas_tsp_request_qos();
-	}
-#endif
-
 out:
 	return IRQ_HANDLED;
 }

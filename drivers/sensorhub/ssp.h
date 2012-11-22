@@ -362,6 +362,7 @@ void remove_prox_factorytest(struct ssp_data *);
 void remove_light_factorytest(struct ssp_data *);
 void remove_pressure_factorytest(struct ssp_data *);
 void remove_magnetic_factorytest(struct ssp_data *);
+void destroy_sensor_class(void);
 int initialize_event_symlink(struct ssp_data *);
 int accel_open_calibration(struct ssp_data *);
 int gyro_open_calibration(struct ssp_data *);

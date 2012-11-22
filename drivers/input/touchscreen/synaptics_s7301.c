@@ -38,15 +38,19 @@ do {		\
 
 #define CHECK_PAGE(addr)	((addr >> 8) & 0xff)
 
-static void synaptics_ts_set_page(struct synaptics_drv_data *data,
+static int synaptics_ts_set_page(struct synaptics_drv_data *data,
 	u16 addr)
 {
 	u8 page = CHECK_PAGE(addr);
+	if (data->suspend)
+		return -EAGAIN;
+
 	if (page != data->page) {
 		u8 buf[2] = {0xff, page};
 		 i2c_master_send(data->client, buf, sizeof(buf));
 		 data->page = page;
 	}
+	return 0;
 }
 
 int synaptics_ts_write_data(struct synaptics_drv_data *data,
@@ -55,7 +59,8 @@ int synaptics_ts_write_data(struct synaptics_drv_data *data,
 	struct i2c_msg msg;
 	u8 buf[2];
 
-	synaptics_ts_set_page(data, addr);
+	if (synaptics_ts_set_page(data, addr))
+		return -EAGAIN;
 
 	buf[0] = addr & 0xff;
 	buf[1] = cmd;
@@ -73,7 +78,8 @@ int synaptics_ts_read_data(struct synaptics_drv_data *data,
 {
 	struct i2c_msg msg[2];
 
-	synaptics_ts_set_page(data, addr);
+	if (synaptics_ts_set_page(data, addr))
+		return -EAGAIN;
 
 	msg[0].addr = data->client->addr;
 	msg[0].flags = 0x00;
@@ -95,7 +101,8 @@ int synaptics_ts_write_block(struct synaptics_drv_data *data,
 	int ret = 0, i = 0;
 	u8 buf[256];
 
-	synaptics_ts_set_page(data, addr);
+	if (synaptics_ts_set_page(data, addr))
+		return -EAGAIN;
 
 	buf[0] = addr & 0xff;
 
@@ -118,7 +125,8 @@ int synaptics_ts_read_block(struct synaptics_drv_data *data,
 	struct i2c_msg msg[2];
 	int ret = 0;
 
-	synaptics_ts_set_page(data, addr);
+	if (synaptics_ts_set_page(data, addr))
+		return -EAGAIN;
 
 	msg[0].addr = data->client->addr;
 	msg[0].flags = 0x00;
@@ -142,9 +150,13 @@ static void free_dvfs_lock(struct work_struct *work)
 		container_of(work, struct synaptics_drv_data,
 			dvfs_dwork.work);
 
-	dev_unlock(data->bus_dev, data->dev);
-	exynos_cpufreq_lock_free(DVFS_LOCK_ID_TSP);
-	data->dvfs_lock_status = false;
+	if (data->dvfs_lock_status)
+		dev_lock(data->bus_dev,
+			data->dev, SEC_BUS_LOCK_FREQ);
+	else {
+		dev_unlock(data->bus_dev, data->dev);
+		exynos_cpufreq_lock_free(DVFS_LOCK_ID_TSP);
+	}
 }
 void set_dvfs_lock(struct synaptics_drv_data *data, bool en)
 {
@@ -153,18 +165,22 @@ void set_dvfs_lock(struct synaptics_drv_data *data, bool en)
 			&data->cpufreq_level);
 
 	if (en) {
-		cancel_delayed_work(&data->dvfs_dwork);
 		if (!data->dvfs_lock_status) {
+			cancel_delayed_work(&data->dvfs_dwork);
 			dev_lock(data->bus_dev,
-				data->dev, SEC_BUS_LOCK_FREQ);
+				data->dev, SEC_BUS_LOCK_FREQ2);
 			exynos_cpufreq_lock(DVFS_LOCK_ID_TSP,
 				data->cpufreq_level);
 			data->dvfs_lock_status = true;
+			schedule_delayed_work(&data->dvfs_dwork,
+				 msecs_to_jiffies(SEC_DVFS_LOCK_TIMEOUT));
 		}
 	} else {
-		if (data->dvfs_lock_status)
+		if (data->dvfs_lock_status) {
 			schedule_delayed_work(&data->dvfs_dwork,
-				(SEC_DVFS_LOCK_TIMEOUT * HZ) / 1000);
+				msecs_to_jiffies(SEC_DVFS_LOCK_TIMEOUT));
+			data->dvfs_lock_status = false;
+		}
 	}
 }
 #endif	/* CONFIG_SEC_TOUCHSCREEN_DVFS_LOCK */
@@ -265,6 +281,7 @@ static int synaptics_ts_read_dummy(struct synaptics_drv_data *data)
 static void set_charger_connection_bit(struct synaptics_drv_data *data)
 {
 	u8 buf = 0;
+	u8 delta_threshold = 0;
 
 	if (data->suspend) {
 		schedule_delayed_work(&data->noti_dwork, HZ / 2);
@@ -274,13 +291,21 @@ static void set_charger_connection_bit(struct synaptics_drv_data *data)
 	synaptics_ts_read_data(data,
 		data->f01.control_base_addr, &buf);
 
-	if (data->charger_connection)
+	if (data->charger_connection) {
 		buf |= CHARGER_CONNECT_BIT;
-	else
+		delta_threshold = 3;
+	} else {
 		buf &= ~(CHARGER_CONNECT_BIT);
+		delta_threshold = 1;
+	}
 
 	synaptics_ts_write_data(data,
 		data->f01.control_base_addr, buf);
+
+	synaptics_ts_write_data(data,
+		data->f11.control_base_addr + 2, delta_threshold);
+	synaptics_ts_write_data(data,
+		data->f11.control_base_addr + 3, delta_threshold);
 }
 
 static void inform_charger_connection(struct charger_callbacks *cb, int mode)
@@ -288,15 +313,9 @@ static void inform_charger_connection(struct charger_callbacks *cb, int mode)
 	struct synaptics_drv_data *data = container_of(cb,
 			struct synaptics_drv_data, callbacks);
 
-	if (!data->ready) {
-		printk(KERN_DEBUG
-			"[TSP] %s - driver is not ready\n",
-			__func__);
-		return ;
-	}
-
 	data->charger_connection = !!mode;
-	set_charger_connection_bit(data);
+	if (data->ready)
+		set_charger_connection_bit(data);
 }
 
 static int synaptics_ts_set_func(struct synaptics_drv_data *data)
@@ -311,6 +330,9 @@ static int synaptics_ts_set_func(struct synaptics_drv_data *data)
 		synaptics_ts_set_func_info(data);
 	} else
 		synaptics_fw_updater(data, NULL);
+
+	printk(KERN_DEBUG "[TSP] firmware version %s\n",
+		data->firm_version);
 
 	for (i = 0; i < MAX_TOUCH_NUM; ++i)
 		data->finger[i].status = MT_STATUS_INACTIVE;
@@ -373,6 +395,7 @@ static void synaptics_ts_read_points(struct synaptics_drv_data *data,
 				return ;
 			}
 
+#if !defined(CONFIG_SAMSUNG_PRODUCT_SHIP)
 			if (data->debug)
 				printk(KERN_DEBUG
 					"[TSP] ID: %d, x_msb: %d, y_msb: %d, z: %d\n",
@@ -380,6 +403,7 @@ static void synaptics_ts_read_points(struct synaptics_drv_data *data,
 					buf.x_msb,
 					buf.y_msb,
 					buf.z);
+#endif
 
 			data->finger[id].x =
 				(buf.x_msb << 4) +
@@ -407,31 +431,36 @@ static void synaptics_ts_read_points(struct synaptics_drv_data *data,
 					data->finger[id].status) {
 					data->finger[id].status =
 						MT_STATUS_PRESS;
-					if (data->debug)
+#if !defined(CONFIG_SAMSUNG_PRODUCT_SHIP)
 						printk(KERN_DEBUG
 							"[TSP] ID: %d, x: %d, y: %d, z: %d\n",
 							id,
 							data->finger[id].x,
 							data->finger[id].y,
 							data->finger[id].z);
-					else
+#else
 						printk(KERN_DEBUG
 							"s7301 %d P\n", id);
-				} else if (data->debug)
+#endif
+				}
+#if !defined(CONFIG_SAMSUNG_PRODUCT_SHIP)
+				else if (data->debug)
 					printk(KERN_DEBUG
 						"[TSP] ID: %d, x: %d, y: %d, z: %d\n",
 						id,
 						data->finger[id].x,
 						data->finger[id].y,
 						data->finger[id].z);
+#endif
 			}
 		} else if (MT_STATUS_PRESS == data->finger[id].status) {
 			data->finger[id].status = MT_STATUS_RELEASE;
 			data->finger[id].z = 0;
-			if (data->debug)
+#if !defined(CONFIG_SAMSUNG_PRODUCT_SHIP)
 				printk(KERN_DEBUG "[TSP] ID: %d\n", id);
-			else
+#else
 				printk(KERN_DEBUG "s7301 %d R\n", id);
+#endif
 		}
 	}
 
@@ -488,7 +517,6 @@ static void synaptics_ts_early_suspend(struct early_suspend *h)
 		disable_irq(data->client->irq);
 		forced_release_fingers(data);
 		if (!wake_lock_active(&data->wakelock)) {
-			data->ready = false;
 			data->pdata->set_power(0);
 			data->suspend = true;
 		}
@@ -557,6 +585,12 @@ static void init_function_data_dwork(struct work_struct *work)
 			return ;
 		}
 	}
+
+	if (!data->input_open) {
+		disable_irq(data->client->irq);
+		data->pdata->set_power(0);
+		data->suspend = true;
+	}
 }
 
 static void synaptics_ts_resume_dwork(struct work_struct *work)
@@ -567,12 +601,11 @@ static void synaptics_ts_resume_dwork(struct work_struct *work)
 
 	mutex_lock(&data->mutex);
 	if (data->suspend) {
-		data->ready = true;
+		data->suspend = false;
 		set_charger_connection_bit(data);
 		synaptics_ts_drawing_mode(data);
 		synaptics_ts_read_dummy(data);
 		enable_irq(data->client->irq);
-		data->suspend = false;
 	}
 	mutex_unlock(&data->mutex);
 }
@@ -584,6 +617,26 @@ static void synaptics_ts_noti_dwork(struct work_struct *work)
 		noti_dwork.work);
 
 	set_charger_connection_bit(data);
+}
+
+static int synaptics_ts_open(struct input_dev *dev)
+{
+	struct synaptics_drv_data *data =
+		input_get_drvdata(dev);
+
+	data->input_open = true;
+
+	if (data->suspend) {
+		data->pdata->set_power(1);
+		schedule_delayed_work(&data->resume_dwork, HZ / 10);
+	}
+
+	return 0;
+}
+
+static void synaptics_ts_close(struct input_dev *dev)
+{
+	/* TBD */
 }
 
 static int __init synaptics_ts_probe(struct i2c_client *client,
@@ -642,6 +695,8 @@ static int __init synaptics_ts_probe(struct i2c_client *client,
 #else
 	input->name = "sec_touchscreen";
 #endif
+	input->open = synaptics_ts_open;
+	input->close = synaptics_ts_close;
 
 	__set_bit(EV_ABS, input->evbit);
 	__set_bit(EV_KEY, input->evbit);
@@ -702,6 +757,7 @@ static int synaptics_ts_remove(struct i2c_client *client)
 
 	unregister_early_suspend(&data->early_suspend);
 	free_irq(client->irq, data);
+	remove_tsp_sysfs(data);
 	input_unregister_device(data->input);
 	kfree(data);
 	return 0;

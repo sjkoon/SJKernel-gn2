@@ -45,7 +45,7 @@
 
 #define EXTERNAL_MODEM "external_modem"
 #define EHCI_REG_DUMP
-#define DEFAULT_RAW_WAKE_TIME (0*HZ)
+#define DEFAULT_RAW_WAKE_TIME (6*HZ)
 
 BLOCKING_NOTIFIER_HEAD(mdm_reset_notifier_list);
 

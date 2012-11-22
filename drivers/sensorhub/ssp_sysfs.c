@@ -489,4 +489,5 @@ void remove_sysfs(struct ssp_data *data)
 	remove_pressure_factorytest(data);
 	remove_magnetic_factorytest(data);
 	remove_mcu_factorytest(data);
+	destroy_sensor_class();
 }

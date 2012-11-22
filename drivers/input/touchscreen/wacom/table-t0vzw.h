@@ -53,5 +53,5 @@ short tilt_offsetX[MAX_HAND][MAX_ROTATION] = \
 short tilt_offsetY[MAX_HAND][MAX_ROTATION] = \
 	{{40, 0, -40, 20, }, {20, 40, 0, -40, }};
 
-char* tuning_version = "0920";
+char* tuning_version = "0919";
 char *tuning_model = "I605";

@@ -25,19 +25,25 @@ int waiting_wakeup_mcu(struct ssp_data *data)
 	if (iDelaycnt >= 200) {
 		pr_err("[SSP]: %s - MCU Irq Timeout!!\n", __func__);
 		data->uBusyCnt++;
+	} else {
+		data->uBusyCnt = 0;
 	}
 
 	iDelaycnt = 0;
 	data->wakeup_mcu();
-	while (data->check_mcu_ready() && (iDelaycnt++ < 50)
+	while (data->check_mcu_ready() && (iDelaycnt++ < 200)
 		&& (data->bCheckShutdown == false))
-		udelay(50);
+		mdelay(5);
 
-	if ((iDelaycnt >= 50) || (data->bCheckShutdown == true)) {
+	if (iDelaycnt >= 200) {
 		pr_err("[SSP]: %s - MCU Wakeup Timeout!!\n", __func__);
 		data->uTimeOutCnt++;
-		return FAIL;
+	} else {
+		data->uTimeOutCnt = 0;
 	}
+
+	if (data->bCheckShutdown == true)
+		return FAIL;
 
 	return SUCCESS;
 }

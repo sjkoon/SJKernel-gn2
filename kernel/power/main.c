@@ -27,6 +27,17 @@
 #include <mach/cpufreq.h>
 #endif
 
+#ifdef CONFIG_GPU_LOCK
+#include <mach/gpufreq.h>
+#endif
+
+#if defined(CONFIG_CPU_EXYNOS4412) && defined(CONFIG_VIDEO_MALI400MP) \
+		&& defined(CONFIG_VIDEO_MALI400MP_DVFS)
+#define CONFIG_PEGASUS_GPU_LOCK
+extern int mali_dvfs_bottom_lock_push(int lock_step);
+extern int mali_dvfs_bottom_lock_pop(void);
+#endif
+
 #include "power.h"
 
 DEFINE_MUTEX(pm_mutex);
@@ -456,9 +467,6 @@ static ssize_t cpufreq_max_limit_store(struct kobject *kobj,
 			printk(KERN_ERR "%s: Unlock request is ignored\n",
 				__func__);
 	} else { /* Lock request */
-		if (val < 1400000) {
-			val = 1000000;
-
 		if (get_cpufreq_level((unsigned int)val, &cpufreq_level)
 		    == VALID_LEVEL) {
 			if (cpufreq_max_limit_val != -1)
@@ -473,7 +481,6 @@ static ssize_t cpufreq_max_limit_store(struct kobject *kobj,
 		} else /* Invalid lock request --> No action */
 			printk(KERN_ERR "%s: Lock request is invalid\n",
 				__func__);
-		}
 	}
 
 	ret = n;
@@ -515,11 +522,11 @@ static ssize_t cpufreq_min_limit_store(struct kobject *kobj,
 	} else { /* Lock request */
 		if (get_cpufreq_level((unsigned int)val, &cpufreq_level)
 			== VALID_LEVEL) {
-			//if (cpufreq_min_limit_val != -1)
+			if (cpufreq_min_limit_val != -1)
 				/* Unlock the previous lock */
-			//	exynos_cpufreq_lock_free(DVFS_LOCK_ID_USER);
-			//lock_ret = exynos_cpufreq_lock(
-			//		DVFS_LOCK_ID_USER, cpufreq_level);
+				exynos_cpufreq_lock_free(DVFS_LOCK_ID_USER);
+			lock_ret = exynos_cpufreq_lock(
+					DVFS_LOCK_ID_USER, cpufreq_level);
 			/* ret of exynos_cpufreq_lock is meaningless.
 			   0 is fail? success? */
 			cpufreq_min_limit_val = val;
@@ -543,6 +550,56 @@ power_attr(cpufreq_max_limit);
 power_attr(cpufreq_min_limit);
 #endif /* CONFIG_DVFS_LIMIT */
 
+#ifdef CONFIG_GPU_LOCK
+static int gpu_lock_val;
+DEFINE_MUTEX(gpu_lock_mutex);
+
+static ssize_t gpu_lock_show(struct kobject *kobj,
+					struct kobj_attribute *attr,
+					char *buf)
+{
+	return sprintf(buf, "%d\n", gpu_lock_val);
+}
+
+static ssize_t gpu_lock_store(struct kobject *kobj,
+					struct kobj_attribute *attr,
+					const char *buf, size_t n)
+{
+	int val;
+	ssize_t ret = -EINVAL;
+
+	mutex_lock(&gpu_lock_mutex);
+
+	if (sscanf(buf, "%d", &val) != 1) {
+		pr_info("%s: Invalid mali lock format\n", __func__);
+		goto out;
+	}
+
+	if (val == 0) {
+		if (gpu_lock_val != 0) {
+			exynos_gpufreq_unlock();
+			gpu_lock_val = 0;
+		} else {
+			pr_info("%s: Unlock request is ignored\n", __func__);
+		}
+	} else if (val == 1) {
+		if (gpu_lock_val == 0) {
+			exynos_gpufreq_lock();
+			gpu_lock_val = val;
+		} else {
+			pr_info("%s: Lock request is ignored\n", __func__);
+		}
+	} else {
+		pr_info("%s: Lock request is invalid\n", __func__);
+	}
+
+	ret = n;
+out:
+	mutex_unlock(&gpu_lock_mutex);
+	return ret;
+}
+power_attr(gpu_lock);
+#endif
 
 #ifdef CONFIG_ROTATION_BOOSTER_SUPPORT
 static inline void rotation_booster_on(void)
@@ -615,6 +672,52 @@ static inline void rotation_booster_on(void){}
 static inline void rotation_booster_off(void){}
 #endif /* CONFIG_ROTATION_BOOSTER_SUPPORT */
 
+#ifdef CONFIG_PEGASUS_GPU_LOCK
+static int mali_lock_val;
+static int mali_lock_cnt;
+DEFINE_MUTEX(mali_lock_mutex);
+
+static ssize_t mali_lock_show(struct kobject *kobj,
+					struct kobj_attribute *attr,
+					char *buf)
+{
+	return sprintf(buf, "level = %d, count = %d\n",
+			mali_lock_val, mali_lock_cnt);
+}
+
+static ssize_t mali_lock_store(struct kobject *kobj,
+					struct kobj_attribute *attr,
+					const char *buf, size_t n)
+{
+	int val;
+	ssize_t ret = -EINVAL;
+
+	mutex_lock(&mali_lock_mutex);
+
+	if (sscanf(buf, "%d", &val) != 1) {
+		pr_info("%s: Invalid mali lock format\n", __func__);
+		goto out;
+	}
+
+	if (val == 0) {	/* unlock */
+		mali_lock_cnt = mali_dvfs_bottom_lock_pop();
+		if (mali_lock_cnt == 0)
+			mali_lock_val = 0;
+	} else if (val > 0 && val < 5) { /* lock with level */
+		mali_lock_cnt = mali_dvfs_bottom_lock_push(val);
+		if (mali_lock_val < val)
+			mali_lock_val = val;
+	} else {
+		pr_info("%s: Lock request is invalid\n", __func__);
+	}
+
+	ret = n;
+out:
+	mutex_unlock(&mali_lock_mutex);
+	return ret;
+}
+power_attr(mali_lock);
+#endif
 
 static struct attribute * g[] = {
 	&state_attr.attr,
@@ -637,6 +740,12 @@ static struct attribute * g[] = {
 	&cpufreq_table_attr.attr,
 	&cpufreq_max_limit_attr.attr,
 	&cpufreq_min_limit_attr.attr,
+#endif
+#ifdef CONFIG_GPU_LOCK
+	&gpu_lock_attr.attr,
+#endif
+#ifdef CONFIG_PEGASUS_GPU_LOCK
+	&mali_lock_attr.attr,
 #endif
 #ifdef CONFIG_ROTATION_BOOSTER_SUPPORT
 	&rotation_booster_attr.attr,

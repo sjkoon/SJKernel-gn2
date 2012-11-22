@@ -67,7 +67,7 @@ static ssize_t adc_data_read(struct device *dev,
 	bool bSuccess = false;
 	u8 chTempbuf[2] = {1, 20};
 	s16 iSensorBuf[3] = {0, };
-	int iRetries = 10;
+	int iRetries = 20;
 	struct ssp_data *data = dev_get_drvdata(dev);
 
 	data->buf[GEOMAGNETIC_SENSOR].x = 0;
@@ -79,7 +79,7 @@ static ssize_t adc_data_read(struct device *dev,
 			chTempbuf, 2);
 
 	do {
-		msleep(60);
+		msleep(50);
 		if (check_data_spec(data) == SUCCESS)
 			break;
 	} while (--iRetries);
