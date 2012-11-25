@@ -25,7 +25,6 @@ In file included from arch/arm/mach-exynos/midas-wacom.c:16:0:
 include/linux/wacom_i2c.h:306:30: warning: ‘wacom_feature_EMR’ defined but not used [-Wunused-variable]
   LD      arch/arm/mach-exynos/built-in.o
   CC      drivers/input/touchscreen/wacom/wacom_i2c.o
-  CC      drivers/input/touchscreen/wacom/wacom_i2c_firm.o
 drivers/input/touchscreen/wacom/wacom_i2c.c: In function ‘wacom_i2c_get_ums_data’:
 drivers/input/touchscreen/wacom/wacom_i2c.c:189:2: warning: label ‘open_err’ defined but not used [-Wunused-label]
 drivers/input/touchscreen/wacom/wacom_i2c.c: In function ‘wac_statecheck_work’:
@@ -39,15 +38,16 @@ drivers/input/touchscreen/wacom/wacom_i2c.c:985:7: warning: unused variable ‘c
 drivers/input/touchscreen/wacom/wacom_i2c.c:984:20: warning: unused variable ‘wac_i2c’ [-Wunused-variable]
 drivers/input/touchscreen/wacom/wacom_i2c.c: In function ‘epen_ave_result_show’:
 drivers/input/touchscreen/wacom/wacom_i2c.c:1013:20: warning: unused variable ‘wac_i2c’ [-Wunused-variable]
+  CC      drivers/input/touchscreen/wacom/wacom_i2c_firm.o
 drivers/input/touchscreen/wacom/wacom_i2c_firm.c: In function ‘wacom_i2c_init_firm_data’:
 drivers/input/touchscreen/wacom/wacom_i2c_firm.c:130:6: warning: unused variable ‘i’ [-Wunused-variable]
 In file included from drivers/input/touchscreen/wacom/wacom_i2c_firm.c:20:0:
 drivers/input/touchscreen/wacom/wacom_i2c_firm.c: At top level:
 include/linux/wacom_i2c.h:306:30: warning: ‘wacom_feature_EMR’ defined but not used [-Wunused-variable]
   CC      drivers/input/touchscreen/wacom/wacom_i2c_flash.o
+  CC      drivers/input/touchscreen/wacom/wacom_i2c_func.o
 In file included from drivers/input/touchscreen/wacom/wacom_i2c_flash.c:20:0:
 include/linux/wacom_i2c.h:306:30: warning: ‘wacom_feature_EMR’ defined but not used [-Wunused-variable]
-  CC      drivers/input/touchscreen/wacom/wacom_i2c_func.o
 In file included from drivers/input/touchscreen/wacom/wacom_i2c_func.c:20:0:
 include/linux/wacom_i2c.h:306:30: warning: ‘wacom_feature_EMR’ defined but not used [-Wunused-variable]
   LD      drivers/input/touchscreen/wacom/built-in.o
@@ -100,8 +100,8 @@ drivers/net/wireless/bcmdhd/wl_roam.c:102:7: warning: unused variable ‘band’
   LD      vmlinux
   SYSMAP  System.map
   SYSMAP  .tmp_System.map
-  Building modules, stage 2.
   OBJCOPY arch/arm/boot/Image
+  Building modules, stage 2.
   MODPOST 7 modules
   Kernel: arch/arm/boot/Image is ready
   LZO     arch/arm/boot/compressed/piggy.lzo

@@ -49,10 +49,10 @@
 
 #include <asm/unaligned.h>
 
-/*#ifdef CONFIG_CPU_FREQ_GOV_ONDEMAND_FLEXRATE
+#ifdef CONFIG_CPU_FREQ_GOV_ONDEMAND_FLEXRATE
 #include <mach/midas-tsp.h>
 #endif
-*/
+
 #ifdef CONFIG_INPUT_FBSUSPEND
 #ifdef CONFIG_DRM
 #include <drm/drm_backlight.h>
