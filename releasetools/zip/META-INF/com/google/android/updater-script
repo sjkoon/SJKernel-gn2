@@ -1,10 +1,10 @@
 ui_print(" ");
-ui_print(" -=-=-= SJKernel Kernel CWM =-=-=- ");
+ui_print(" -=-=-= SJKernel Kernel flash in CWM =-=-=- ");
 ui_print(" ");
 show_progress(0.100000, 0);
 show_progress(0.100000, 40);
 
-ui_print(" -=-=-= Kernel Flashing now =-=-=- *");
+ui_print(" -=-=-= Kernel Flashing now......... =-=-=- *");
 
 assert(package_extract_file("boot.img", "/tmp/boot.img"),
 show_progress(0.100000, 70);
@@ -16,4 +16,4 @@ show_progress(0.100000, 100);
 ui_print(" ");
 ui_print(" ");
 ui_print(" Installation Successful.");
-ui_print(" Have a good day! ");
+ui_print(" Have a good day! i'm sjkoon.");

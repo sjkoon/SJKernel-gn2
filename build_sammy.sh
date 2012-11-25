@@ -14,7 +14,7 @@ fi
 
 # Set Default Path
 TOP_DIR=$PWD
-KERNEL_PATH="/home/sjkoon/SJKernel-gn2"
+KERNEL_PATH="/home/sjkoon/nead"
 
 # Set toolchain and root filesystem path
 #TOOLCHAIN="/home/simone/arm-2009q3/bin/arm-none-linux-gnueabi-"
@@ -47,6 +47,7 @@ cp -ax $ROOTFS_PATH $RAMFS_TMP
 # Copying kernel modules
 find -name '*.ko' -exec cp -av {} $RAMFS_TMP/lib/modules/ \;
 #unzip $KERNEL_PATH/proprietary-modules/proprietary-modules.zip -d $ROOTFS_PATH/lib/modules
+/home/sjkoon/arm-linux-gnueabihf-4.7/bin/arm-linux-gnueabihf-strip --strip-unneeded $RAMFS_TMP/lib/modules/*
 
 make -j`grep 'processor' /proc/cpuinfo | wc -l` ARCH=arm CROSS_COMPILE=$TOOLCHAIN || exit -1
 
@@ -64,8 +65,9 @@ gzip -9 ramdisk.cpio
 
 cd $KERNEL_PATH
 # Make boot.img
-./mkbootimg --kernel zImage --ramdisk $RAMFS_TMP/../ramdisk.cpio.gz --board smdk4x12 --base 0x10000000 --pagesize 2048 --ramdiskaddr 0x11000000 -o $KERNEL_PATH/boot.img
+./mkbootimg --kernel zImage --ramdisk $RAMFS_TMP/../ramdisk.cpio.gz --board smdk4x12 --base 0x10000000 --pagesize 2048 --ramdiskaddr 0x11000000 -o $KERNEL_PATH/boot.img.pre
 
+/usr/bin/python2.7 ./mkshbootimg.py $KERNEL_PATH/boot.img $KERNEL_PATH/boot.img.pre $KERNEL_PATH/payload.tar
 # Copy boot.img
 cp boot.img $KERNEL_PATH/releasetools/zip
 cp boot.img $KERNEL_PATH/releasetools/tar
@@ -82,3 +84,5 @@ tar cf $KBUILD_BUILD_VERSION_$1.tar boot.img && ls -lh $KBUILD_BUILD_VERSION_$1.
 rm $KERNEL_PATH/releasetools/zip/boot.img
 rm $KERNEL_PATH/releasetools/tar/boot.img
 rm $KERNEL_PATH/zImage
+mv $KERNEL_PATH/releasetools/tar/$1.tar /home/sjkoon/sjkoon/sjkoon/public_html/sjkernel_$1.tar
+mv $KERNEL_PATH/releasetools/zip/$1.zip /home/sjkoon/sjkoon/sjkoon/public_html/sjkernel_$1.zip

@@ -83,6 +83,7 @@ deps_config := \
 	fs/ext3/Kconfig \
 	fs/ext2/Kconfig \
 	fs/Kconfig \
+	drivers/j4fs/Kconfig \
 	drivers/interceptor/Kconfig \
 	drivers/felica/Kconfig \
 	drivers/iommu/Kconfig \
@@ -666,6 +667,7 @@ deps_config := \
 	drivers/sh/intc/Kconfig \
 	drivers/sh/Kconfig \
 	arch/arm/mach-shmobile/Kconfig \
+	arch/arm/mach-exynos/Kconfig.slp \
 	arch/arm/mach-exynos/Kconfig.local \
 	arch/arm/mach-exynos/Kconfig \
 	arch/arm/mach-s5pv210/Kconfig \

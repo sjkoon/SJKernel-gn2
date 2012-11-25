@@ -1602,10 +1602,10 @@ EXPORT_SYMBOL_GPL(cpufreq_ondemand_flexrate_request);
 static inline void dbs_timer_init(struct cpu_dbs_info_s *dbs_info)
 {
 	/* We want all CPUs to do sampling nearly on same jiffy */
-	int delay = usecs_to_jiffies(DEF_START_DELAY * 1000 * 1000
+	int delay = usecs_to_jiffies(DEF_START_DELAY * 100 * 1000
 				     + dbs_tuners_ins.sampling_rate);
-	if (num_online_cpus() > 1)
-		delay -= jiffies % delay;
+	/*if (num_online_cpus() > 1)
+		delay -= jiffies % delay; */
 
 	INIT_DELAYED_WORK_DEFERRABLE(&dbs_info->work, do_dbs_timer);
 	INIT_WORK(&dbs_info->up_work, cpu_up_work);
