@@ -25,6 +25,7 @@ In file included from arch/arm/mach-exynos/midas-wacom.c:16:0:
 include/linux/wacom_i2c.h:306:30: warning: ‘wacom_feature_EMR’ defined but not used [-Wunused-variable]
   LD      arch/arm/mach-exynos/built-in.o
   CC      drivers/input/touchscreen/wacom/wacom_i2c.o
+  CC      drivers/input/touchscreen/wacom/wacom_i2c_firm.o
 drivers/input/touchscreen/wacom/wacom_i2c.c: In function ‘wacom_i2c_get_ums_data’:
 drivers/input/touchscreen/wacom/wacom_i2c.c:189:2: warning: label ‘open_err’ defined but not used [-Wunused-label]
 drivers/input/touchscreen/wacom/wacom_i2c.c: In function ‘wac_statecheck_work’:
@@ -38,22 +39,21 @@ drivers/input/touchscreen/wacom/wacom_i2c.c:985:7: warning: unused variable ‘c
 drivers/input/touchscreen/wacom/wacom_i2c.c:984:20: warning: unused variable ‘wac_i2c’ [-Wunused-variable]
 drivers/input/touchscreen/wacom/wacom_i2c.c: In function ‘epen_ave_result_show’:
 drivers/input/touchscreen/wacom/wacom_i2c.c:1013:20: warning: unused variable ‘wac_i2c’ [-Wunused-variable]
-  CC      drivers/input/touchscreen/wacom/wacom_i2c_firm.o
 drivers/input/touchscreen/wacom/wacom_i2c_firm.c: In function ‘wacom_i2c_init_firm_data’:
 drivers/input/touchscreen/wacom/wacom_i2c_firm.c:130:6: warning: unused variable ‘i’ [-Wunused-variable]
 In file included from drivers/input/touchscreen/wacom/wacom_i2c_firm.c:20:0:
 drivers/input/touchscreen/wacom/wacom_i2c_firm.c: At top level:
 include/linux/wacom_i2c.h:306:30: warning: ‘wacom_feature_EMR’ defined but not used [-Wunused-variable]
   CC      drivers/input/touchscreen/wacom/wacom_i2c_flash.o
-  CC      drivers/input/touchscreen/wacom/wacom_i2c_func.o
 In file included from drivers/input/touchscreen/wacom/wacom_i2c_flash.c:20:0:
 include/linux/wacom_i2c.h:306:30: warning: ‘wacom_feature_EMR’ defined but not used [-Wunused-variable]
+  CC      drivers/input/touchscreen/wacom/wacom_i2c_func.o
 In file included from drivers/input/touchscreen/wacom/wacom_i2c_func.c:20:0:
 include/linux/wacom_i2c.h:306:30: warning: ‘wacom_feature_EMR’ defined but not used [-Wunused-variable]
+  CC [M]  drivers/net/wireless/bcmdhd/bcmsdh.o
   LD      drivers/input/touchscreen/wacom/built-in.o
   LD      drivers/input/touchscreen/built-in.o
   LD      drivers/input/built-in.o
-  CC [M]  drivers/net/wireless/bcmdhd/bcmsdh.o
   CC [M]  drivers/net/wireless/bcmdhd/bcmsdh_linux.o
   CC [M]  drivers/net/wireless/bcmdhd/bcmsdh_sdmmc.o
   CC [M]  drivers/net/wireless/bcmdhd/bcmsdh_sdmmc_linux.o
@@ -61,12 +61,12 @@ include/linux/wacom_i2c.h:306:30: warning: ‘wacom_feature_EMR’ defined but n
   CC [M]  drivers/net/wireless/bcmdhd/dhd_common.o
   CC [M]  drivers/net/wireless/bcmdhd/dhd_custom_gpio.o
   CC [M]  drivers/net/wireless/bcmdhd/dhd_custom_sec.o
-  CC [M]  drivers/net/wireless/bcmdhd/dhd_linux.o
 drivers/net/wireless/bcmdhd/dhd_custom_sec.c: In function ‘dhd_read_macaddr’:
 drivers/net/wireless/bcmdhd/dhd_custom_sec.c:175:8: warning: unused variable ‘nvfilepath’ [-Wunused-variable]
-  CC [M]  drivers/net/wireless/bcmdhd/dhd_linux_sched.o
+  CC [M]  drivers/net/wireless/bcmdhd/dhd_linux.o
 drivers/net/wireless/bcmdhd/dhd_linux.c: In function ‘dhd_preinit_ioctls’:
 drivers/net/wireless/bcmdhd/dhd_linux.c:3930:21: warning: extra tokens at end of #ifdef directive [enabled by default]
+  CC [M]  drivers/net/wireless/bcmdhd/dhd_linux_sched.o
   CC [M]  drivers/net/wireless/bcmdhd/dhd_cfg80211.o
   CC [M]  drivers/net/wireless/bcmdhd/dhd_sdio.o
   CC [M]  drivers/net/wireless/bcmdhd/aiutils.o

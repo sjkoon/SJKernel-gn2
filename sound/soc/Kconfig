@@ -3,7 +3,7 @@
 #
 
 menuconfig SND_SOC
-	tristate "ALSA for SoC audio support"
+	tristate "ALSA for SoC audio supportA"
 	select SND_PCM
 	select AC97_BUS if SND_SOC_AC97_BUS
 	select SND_JACK if INPUT=y || INPUT=SND

@@ -23,7 +23,7 @@ TOOLCHAIN="/home/sjkoon/arm-linux-gnueabihf-4.7/bin/arm-linux-gnueabihf-"
 #TOOLCHAIN="/home/simone/android/system/prebuilt/linux-x86/toolchain/arm-eabi-4.4.3/bin/arm-eabi-"
 ROOTFS_PATH="/home/sjkoon/ramfs/initrd_$1"
 
-export KBUILD_BUILD_VERSION="SJKernel"
+export KBUILD_BUILD_VERSION="SJK"
 export KERNELDIR=$KERNEL_PATH
 
 export USE_SEC_FIPS_MODE=true
@@ -84,5 +84,5 @@ tar cf $KBUILD_BUILD_VERSION_$1.tar boot.img && ls -lh $KBUILD_BUILD_VERSION_$1.
 rm $KERNEL_PATH/releasetools/zip/boot.img
 rm $KERNEL_PATH/releasetools/tar/boot.img
 rm $KERNEL_PATH/zImage
-mv $KERNEL_PATH/releasetools/tar/$1.tar /home/sjkoon/sjkoon/sjkoon/public_html/sjkernel_un_$1.tar
-mv $KERNEL_PATH/releasetools/zip/$1.zip /home/sjkoon/sjkoon/sjkoon/public_html/sjkernel_un_$1.zip
+mv $KERNEL_PATH/releasetools/tar/$1.tar /home/sjkoon/sjkoon/sjkoon/public_html/sjkernel_un$2_$1.tar
+mv $KERNEL_PATH/releasetools/zip/$1.zip /home/sjkoon/sjkoon/sjkoon/public_html/sjkernel_un$2_$1.zip
