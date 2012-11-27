@@ -18,7 +18,7 @@ KERNEL_PATH="/home/sjkoon/nead"
 
 # Set toolchain and root filesystem path
 #TOOLCHAIN="/home/simone/arm-2009q3/bin/arm-none-linux-gnueabi-"
-TOOLCHAIN="/home/sjkoon/arm-linux-gnueabihf-4.7/bin/arm-linux-gnueabihf-"
+TOOLCHAIN="/home/sjkoon/arm-linux-gnueabihf-4.7-2012.11/bin/arm-linux-gnueabihf-"
 ##TOOLCHAIN="/home/sjkoon/arm-eabi-4/bin/arm-linux-androideabi-"
 #TOOLCHAIN="/home/simone/android/system/prebuilt/linux-x86/toolchain/arm-eabi-4.4.3/bin/arm-eabi-"
 ROOTFS_PATH="/home/sjkoon/ramfs/initrd_$1"
@@ -47,7 +47,7 @@ cp -ax $ROOTFS_PATH $RAMFS_TMP
 # Copying kernel modules
 find -name '*.ko' -exec cp -av {} $RAMFS_TMP/lib/modules/ \;
 #unzip $KERNEL_PATH/proprietary-modules/proprietary-modules.zip -d $ROOTFS_PATH/lib/modules
-/home/sjkoon/arm-linux-gnueabihf-4.7/bin/arm-linux-gnueabihf-strip --strip-unneeded $RAMFS_TMP/lib/modules/*
+/home/sjkoon/arm-linux-gnueabihf-4.7-2012.11/bin/arm-linux-gnueabihf-strip --strip-unneeded $RAMFS_TMP/lib/modules/*
 
 make -j`grep 'processor' /proc/cpuinfo | wc -l` ARCH=arm CROSS_COMPILE=$TOOLCHAIN || exit -1
 
