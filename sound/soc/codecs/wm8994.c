@@ -39,8 +39,6 @@
 
 #include "wm8994.h"
 #include "wm_hubs.h"
-#include "wm8994_voodoo.h"
-
 
 #define WM1811_JACKDET_MODE_NONE  0x0000
 #define WM1811_JACKDET_MODE_JACK  0x0100
@@ -194,6 +192,10 @@ static int wm8994_volatile(struct snd_soc_codec *codec, unsigned int reg)
 		return 0;
 	}
 }
+
+#ifdef CONFIG_SND_VOODOO
+#include "wm8994_voodoo.h"
+#endif
 
 static int wm8994_write(struct snd_soc_codec *codec, unsigned int reg,
 	unsigned int value)

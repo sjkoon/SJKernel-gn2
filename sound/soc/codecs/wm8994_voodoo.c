@@ -122,7 +122,7 @@ static struct snd_soc_codec *codec;
 #define DEACTIVE		0x00
 #define PLAYBACK_ACTIVE		0x01
 #define CAPTURE_ACTIVE		0x02
-#define CALL_ACTIVE		0x04
+#define CALL_ACTIVE		0
 
 #define PCM_STREAM_DEACTIVE	0x00
 #define PCM_STREAM_PLAYBACK	0x01
@@ -722,9 +722,8 @@ bool is_path(int unified_path)
 	// headphones
 	case HEADPHONES:
 #ifdef GALAXY_S3
-		if( wm8994->micdet[0].jack == NULL ) return 0;
-		return (wm8994->micdet[0].jack->status & SND_JACK_HEADPHONE) ||
-		(wm8994->micdet[0].jack->status & SND_JACK_HEADSET);
+		if(!wm8994->micdet[0].jack) return 0;
+		return ((wm8994->micdet[0].jack->status & SND_JACK_HEADPHONE) || (wm8994->micdet[0].jack->status & SND_JACK_HEADSET));
 #else
 #ifdef NEXUS_S
 		return (wm8994->cur_path == HP
