@@ -10,83 +10,12 @@ drivers/media/video/samsung/mali/Kconfig:30:warning: choice value used outside i
 make[1]: `include/generated/mach-types.h'는 이미 갱신되었습니다.
   CALL    scripts/checksyscalls.sh
   CHK     include/generated/compile.h
-  CC      arch/arm/mach-exynos/mach-midas.o
+  AS      arch/arm/kernel/head.o
+  CC      kernel/sched.o
   GZIP    kernel/config_data.gz
   IKCFG   kernel/config_data.h
   CC      kernel/configs.o
-In file included from arch/arm/mach-exynos/include/mach/midas-wacom.h:14:0,
-                 from arch/arm/mach-exynos/mach-midas.c:149:
-include/linux/wacom_i2c.h:306:30: warning: ‘wacom_feature_EMR’ defined but not used [-Wunused-variable]
-arch/arm/mach-exynos/mach-midas.c:1159:30: warning: ‘i2c_devs4_max77693’ defined but not used [-Wunused-variable]
-arch/arm/mach-exynos/mach-midas.c:1230:30: warning: ‘i2c_devs6’ defined but not used [-Wunused-variable]
   LD      kernel/built-in.o
-  CC      arch/arm/mach-exynos/midas-wacom.o
-In file included from arch/arm/mach-exynos/midas-wacom.c:16:0:
-include/linux/wacom_i2c.h:306:30: warning: ‘wacom_feature_EMR’ defined but not used [-Wunused-variable]
-  LD      arch/arm/mach-exynos/built-in.o
-  CC      drivers/input/touchscreen/wacom/wacom_i2c.o
-  CC      drivers/input/touchscreen/wacom/wacom_i2c_firm.o
-drivers/input/touchscreen/wacom/wacom_i2c.c: In function ‘wacom_i2c_get_ums_data’:
-drivers/input/touchscreen/wacom/wacom_i2c.c:189:2: warning: label ‘open_err’ defined but not used [-Wunused-label]
-drivers/input/touchscreen/wacom/wacom_i2c.c: In function ‘wac_statecheck_work’:
-drivers/input/touchscreen/wacom/wacom_i2c.c:599:12: warning: unused variable ‘test’ [-Wunused-variable]
-drivers/input/touchscreen/wacom/wacom_i2c.c:598:11: warning: unused variable ‘i’ [-Wunused-variable]
-drivers/input/touchscreen/wacom/wacom_i2c.c: In function ‘epen_firmware_update_store’:
-drivers/input/touchscreen/wacom/wacom_i2c.c:821:2: warning: label ‘param_err’ defined but not used [-Wunused-label]
-drivers/input/touchscreen/wacom/wacom_i2c.c: In function ‘epen_ave_store’:
-drivers/input/touchscreen/wacom/wacom_i2c.c:1001:2: warning: statement with no effect [-Wunused-value]
-drivers/input/touchscreen/wacom/wacom_i2c.c:985:7: warning: unused variable ‘check_version’ [-Wunused-variable]
-drivers/input/touchscreen/wacom/wacom_i2c.c:984:20: warning: unused variable ‘wac_i2c’ [-Wunused-variable]
-drivers/input/touchscreen/wacom/wacom_i2c.c: In function ‘epen_ave_result_show’:
-drivers/input/touchscreen/wacom/wacom_i2c.c:1013:20: warning: unused variable ‘wac_i2c’ [-Wunused-variable]
-drivers/input/touchscreen/wacom/wacom_i2c_firm.c: In function ‘wacom_i2c_init_firm_data’:
-drivers/input/touchscreen/wacom/wacom_i2c_firm.c:130:6: warning: unused variable ‘i’ [-Wunused-variable]
-In file included from drivers/input/touchscreen/wacom/wacom_i2c_firm.c:20:0:
-drivers/input/touchscreen/wacom/wacom_i2c_firm.c: At top level:
-include/linux/wacom_i2c.h:306:30: warning: ‘wacom_feature_EMR’ defined but not used [-Wunused-variable]
-  CC      drivers/input/touchscreen/wacom/wacom_i2c_flash.o
-In file included from drivers/input/touchscreen/wacom/wacom_i2c_flash.c:20:0:
-include/linux/wacom_i2c.h:306:30: warning: ‘wacom_feature_EMR’ defined but not used [-Wunused-variable]
-  CC      drivers/input/touchscreen/wacom/wacom_i2c_func.o
-In file included from drivers/input/touchscreen/wacom/wacom_i2c_func.c:20:0:
-include/linux/wacom_i2c.h:306:30: warning: ‘wacom_feature_EMR’ defined but not used [-Wunused-variable]
-  CC [M]  drivers/net/wireless/bcmdhd/bcmsdh.o
-  LD      drivers/input/touchscreen/wacom/built-in.o
-  LD      drivers/input/touchscreen/built-in.o
-  LD      drivers/input/built-in.o
-  CC [M]  drivers/net/wireless/bcmdhd/bcmsdh_linux.o
-  CC [M]  drivers/net/wireless/bcmdhd/bcmsdh_sdmmc.o
-  CC [M]  drivers/net/wireless/bcmdhd/bcmsdh_sdmmc_linux.o
-  CC [M]  drivers/net/wireless/bcmdhd/dhd_cdc.o
-  CC [M]  drivers/net/wireless/bcmdhd/dhd_common.o
-  CC [M]  drivers/net/wireless/bcmdhd/dhd_custom_gpio.o
-  CC [M]  drivers/net/wireless/bcmdhd/dhd_custom_sec.o
-drivers/net/wireless/bcmdhd/dhd_custom_sec.c: In function ‘dhd_read_macaddr’:
-drivers/net/wireless/bcmdhd/dhd_custom_sec.c:175:8: warning: unused variable ‘nvfilepath’ [-Wunused-variable]
-  CC [M]  drivers/net/wireless/bcmdhd/dhd_linux.o
-drivers/net/wireless/bcmdhd/dhd_linux.c: In function ‘dhd_preinit_ioctls’:
-drivers/net/wireless/bcmdhd/dhd_linux.c:3930:21: warning: extra tokens at end of #ifdef directive [enabled by default]
-  CC [M]  drivers/net/wireless/bcmdhd/dhd_linux_sched.o
-  CC [M]  drivers/net/wireless/bcmdhd/dhd_cfg80211.o
-  CC [M]  drivers/net/wireless/bcmdhd/dhd_sdio.o
-  CC [M]  drivers/net/wireless/bcmdhd/aiutils.o
-  CC [M]  drivers/net/wireless/bcmdhd/bcmevent.o
-  CC [M]  drivers/net/wireless/bcmdhd/bcmutils.o
-  CC [M]  drivers/net/wireless/bcmdhd/bcmwifi_channels.o
-  CC [M]  drivers/net/wireless/bcmdhd/hndpmu.o
-  CC [M]  drivers/net/wireless/bcmdhd/linux_osl.o
-  CC [M]  drivers/net/wireless/bcmdhd/sbutils.o
-  CC [M]  drivers/net/wireless/bcmdhd/siutils.o
-  CC [M]  drivers/net/wireless/bcmdhd/wl_android.o
-  CC [M]  drivers/net/wireless/bcmdhd/wl_cfg80211.o
-  CC [M]  drivers/net/wireless/bcmdhd/wl_cfgp2p.o
-  CC [M]  drivers/net/wireless/bcmdhd/wldev_common.o
-  CC [M]  drivers/net/wireless/bcmdhd/wl_linux_mon.o
-  CC [M]  drivers/net/wireless/bcmdhd/wl_roam.o
-drivers/net/wireless/bcmdhd/wl_roam.c: In function ‘set_roamscan_channel_list’:
-drivers/net/wireless/bcmdhd/wl_roam.c:102:7: warning: unused variable ‘band’ [-Wunused-variable]
-  LD [M]  drivers/net/wireless/bcmdhd/dhd.o
-  LD      drivers/built-in.o
   LD      vmlinux.o
   MODPOST vmlinux.o
   GEN     .version
@@ -100,12 +29,11 @@ drivers/net/wireless/bcmdhd/wl_roam.c:102:7: warning: unused variable ‘band’
   LD      vmlinux
   SYSMAP  System.map
   SYSMAP  .tmp_System.map
-  OBJCOPY arch/arm/boot/Image
   Building modules, stage 2.
-  MODPOST 7 modules
+  MODPOST 9 modules
+  OBJCOPY arch/arm/boot/Image
   Kernel: arch/arm/boot/Image is ready
   LZO     arch/arm/boot/compressed/piggy.lzo
-  LD [M]  drivers/net/wireless/bcmdhd/dhd.ko
   SHIPPED arch/arm/boot/compressed/lib1funcs.S
   AS      arch/arm/boot/compressed/lib1funcs.o
   AS      arch/arm/boot/compressed/piggy.lzo.o
