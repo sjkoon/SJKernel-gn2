@@ -667,6 +667,8 @@ static enum page_references page_check_references(struct page *page,
 	if (referenced_ptes) {
 		if (PageSwapBacked(page))
 			return PAGEREF_ACTIVATE;
+	if ((vm_flags & VM_EXEC) && page_is_file_cache(page))
+		return PAGEREF_ACTIVATE;
 		/*
 		 * All mapped pages start out with page table
 		 * references from the instantiating fault, so we need

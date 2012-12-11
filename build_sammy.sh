@@ -14,7 +14,7 @@ fi
 
 # Set Default Path
 TOP_DIR=$PWD
-KERNEL_PATH="/home/sjkoon/nead"
+KERNEL_PATH="/home/sjkoon/nead/SJKernel-gn2"
 
 # Set toolchain and root filesystem path
 #TOOLCHAIN="/home/simone/arm-2009q3/bin/arm-none-linux-gnueabi-"
@@ -60,7 +60,7 @@ cp -f $KERNEL_PATH/arch/arm/boot/zImage .
 cd $RAMFS_TMP
 find . | cpio -o -H newc > ../ramdisk.cpio
 cd ..
-ls -lh $RAMFS_TMP.cpio
+ls -lh ramdisk.cpio
 gzip -9 ramdisk.cpio
 
 cd $KERNEL_PATH
