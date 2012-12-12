@@ -19,19 +19,16 @@
 		smp_wmb(); \
 } while (0)
 #else
-# define __add_preempt_count(val) do { preempt_count() += (val); } while 
-(0)
+# define __add_preempt_count(val) do { preempt_count() += (val); } while (0)
 #endif
 
 #if defined(CONFIG_JRCU_LAZY) || !defined(CONFIG_JRCU)
-# define __sub_preempt_count(val) do { preempt_count() -= (val); } while 
-(0)
+# define __sub_preempt_count(val) do { preempt_count() -= (val); } while (0)
 #else
 # define __sub_preempt_count(val) do { \
 	int newval = (preempt_count() -= (val)); \
 	if (newval == 0) { \
-		/* race with preemption OK, preempt will do the mb for 
-us */ \
+		/* race with preemption OK, preempt will do the mb for us */ \
 		smp_wmb(); \
 	} \
 } while (0)

@@ -49,10 +49,6 @@
 
 #include <asm/unaligned.h>
 
-#ifdef CONFIG_CPU_FREQ_GOV_ONDEMAND_FLEXRATE
-#include <mach/midas-tsp.h>
-#endif
-
 #ifdef CONFIG_INPUT_FBSUSPEND
 #ifdef CONFIG_DRM
 #include <drm/drm_backlight.h>
@@ -158,15 +154,11 @@ enum {
 /* Touch booster */
 #if defined(CONFIG_EXYNOS4_CPUFREQ) &&\
 	defined(CONFIG_BUSFREQ_OPP)
-#define TOUCH_BOOSTER			0
+#define TOUCH_BOOSTER			1
 #define TOUCH_BOOSTER_OFF_TIME		100
 #define TOUCH_BOOSTER_CHG_TIME		200
 #else
 #define TOUCH_BOOSTER			0
-#endif
-
-#ifdef CONFIG_CPU_FREQ_LCD_FREQ_DFS
-extern void _lcdfreq_lock(int lock);
 #endif
 
 struct device *sec_touchscreen;
@@ -1108,18 +1100,6 @@ static irqreturn_t mms_ts_interrupt(int irq, void *dev_id)
 
 #if TOUCH_BOOSTER
 	set_dvfs_lock(info, !!touch_is_pressed);
-#endif
-
-#ifdef CONFIG_CPU_FREQ_LCD_FREQ_DFS
-	if(!!touch_is_pressed){
-		_lcdfreq_lock(0);
-	}
-#endif
-
-#ifdef CONFIG_CPU_FREQ_GOV_ONDEMAND_FLEXRATE
-	if(!!touch_is_pressed){
-		midas_tsp_request_qos();
-	}
 #endif
 
 out:

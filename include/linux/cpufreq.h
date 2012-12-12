@@ -25,7 +25,7 @@
 #define CPUFREQ_NAME_LEN 16
 
 #if defined(CONFIG_CPU_EXYNOS4212) || defined(CONFIG_CPU_EXYNOS4412)
-#define CPUFREQ_LEVEL_END    (L16 + 1)
+#define CPUFREQ_LEVEL_END		(L16 + 1)
 #endif
 
 /*********************************************************************
@@ -345,9 +345,6 @@ static inline int cpufreq_ondemand_flexrate_request(unsigned int rate_ms,
 }
 #endif
 
-#ifdef CONFIG_CPU_FREQ_LCD_FREQ_DFS
-extern int _lcdfreq_lock(int lock);
-#endif
 
 /*********************************************************************
  *                       CPUFREQ DEFAULT GOVERNOR                    *

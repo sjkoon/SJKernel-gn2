@@ -83,7 +83,7 @@ int sysctl_tcp_ecn __read_mostly = 2;
 EXPORT_SYMBOL(sysctl_tcp_ecn);
 int sysctl_tcp_dsack __read_mostly = 1;
 int sysctl_tcp_app_win __read_mostly = 31;
-int sysctl_tcp_adv_win_scale __read_mostly = 1;
+int sysctl_tcp_adv_win_scale __read_mostly = 2;
 EXPORT_SYMBOL(sysctl_tcp_adv_win_scale);
 
 int sysctl_tcp_stdurg __read_mostly;
@@ -2843,13 +2843,13 @@ static int tcp_try_undo_loss(struct sock *sk)
 static inline void tcp_complete_cwr(struct sock *sk)
 {
 	struct tcp_sock *tp = tcp_sk(sk);
-	
-	/* Do not moderate cwnd if it's already undone in cwr or recovery */
+
+	/* Do not moderate cwnd if it's already undone in cwr or recovery. */
 	if (tp->undo_marker) {
-		if (inet_csk(sk)->icsk_ca_state == TCP_CA_CWR)
-			tp->snd_cwnd = min(tp->snd_cwnd, tp->snd_ssthresh);
-		else /* PRR */
-			tp->snd_cwnd = tp->snd_ssthresh;
+	if (inet_csk(sk)->icsk_ca_state == TCP_CA_CWR)
+	  tp->snd_cwnd = min(tp->snd_cwnd, tp->snd_ssthresh);
+	else /* PRR */
+		tp->snd_cwnd = tp->snd_ssthresh;
 		tp->snd_cwnd_stamp = tcp_time_stamp;
 	}
 	tcp_ca_event(sk, CA_EVENT_COMPLETE_CWR);
@@ -2973,30 +2973,31 @@ EXPORT_SYMBOL(tcp_simple_retransmit);
  * It computes the number of packets to send (sndcnt) based on packets newly
  * delivered:
  *   1) If the packets in flight is larger than ssthresh, PRR spreads the
- *	cwnd reductions across a full RTT.
+ *  cwnd reductions across a full RTT.
  *   2) If packets in flight is lower than ssthresh (such as due to excess
- *	losses and/or application stalls), do not perform any further cwnd
- *	reductions, but instead slow start up to ssthresh.
+ *  losses and/or application stalls), do not perform any further cwnd
+ *  reductions, but instead slow start up to ssthresh.
  */
+
 static void tcp_update_cwnd_in_recovery(struct sock *sk, int newly_acked_sacked,
-					int fast_rexmit, int flag)
+          int fast_rexmit, int flag)
 {
-	struct tcp_sock *tp = tcp_sk(sk);
-	int sndcnt = 0;
-	int delta = tp->snd_ssthresh - tcp_packets_in_flight(tp);
+  struct tcp_sock *tp = tcp_sk(sk);
+  int sndcnt = 0;
+  int delta = tp->snd_ssthresh - tcp_packets_in_flight(tp);
 
-	if (tcp_packets_in_flight(tp) > tp->snd_ssthresh) {
-		u64 dividend = (u64)tp->snd_ssthresh * tp->prr_delivered +
-			       tp->prior_cwnd - 1;
-		sndcnt = div_u64(dividend, tp->prior_cwnd) - tp->prr_out;
-	} else {
-		sndcnt = min_t(int, delta,
-			       max_t(int, tp->prr_delivered - tp->prr_out,
-				     newly_acked_sacked) + 1);
-	}
+  if (tcp_packets_in_flight(tp) > tp->snd_ssthresh) {
+    u64 dividend = (u64)tp->snd_ssthresh * tp->prr_delivered +
+             tp->prior_cwnd - 1;
+    sndcnt = div_u64(dividend, tp->prior_cwnd) - tp->prr_out;
+  } else {
+    sndcnt = min_t(int, delta,
+             max_t(int, tp->prr_delivered - tp->prr_out,
+             newly_acked_sacked) + 1);
+  }
 
-	sndcnt = max(sndcnt, (fast_rexmit ? 1 : 0));
-	tp->snd_cwnd = tcp_packets_in_flight(tp) + sndcnt;
+  sndcnt = max(sndcnt, (fast_rexmit ? 1 : 0));
+  tp->snd_cwnd = tcp_packets_in_flight(tp) + sndcnt;
 }
 
 /* Process an event, which can update packets-in-flight not trivially.
@@ -3011,7 +3012,7 @@ static void tcp_update_cwnd_in_recovery(struct sock *sk, int newly_acked_sacked,
  * tcp_xmit_retransmit_queue().
  */
 static void tcp_fastretrans_alert(struct sock *sk, int pkts_acked,
-				int newly_acked_sacked, int flag)
+          int newly_acked_sacked, int flag)
 {
 	struct inet_connection_sock *icsk = inet_csk(sk);
 	struct tcp_sock *tp = tcp_sk(sk);
@@ -3170,9 +3171,9 @@ static void tcp_fastretrans_alert(struct sock *sk, int pkts_acked,
 
 	if (do_lost || (tcp_is_fack(tp) && tcp_head_timedout(sk)))
 		tcp_update_scoreboard(sk, fast_rexmit);
-	tp->prr_delivered += newly_acked_sacked;
-	tcp_update_cwnd_in_recovery(sk, newly_acked_sacked, fast_rexmit, flag);
-	tcp_xmit_retransmit_queue(sk);
+		tp->prr_delivered += newly_acked_sacked;
+		tcp_update_cwnd_in_recovery(sk, newly_acked_sacked, fast_rexmit, flag);
+		tcp_xmit_retransmit_queue(sk);
 }
 
 static void tcp_valid_rtt_meas(struct sock *sk, u32 seq_rtt)
@@ -3759,7 +3760,7 @@ static int tcp_ack(struct sock *sk, struct sk_buff *skb, int flag)
 	flag |= tcp_clean_rtx_queue(sk, prior_fackets, prior_snd_una);
 
 	newly_acked_sacked = (prior_packets - prior_sacked) -
-			(tp->packets_out - tp->sacked_out);
+	         (tp->packets_out - tp->sacked_out);
 
 	if (tp->frto_counter)
 		frto_cwnd = tcp_process_frto(sk, flag);
@@ -3773,7 +3774,7 @@ static int tcp_ack(struct sock *sk, struct sk_buff *skb, int flag)
 		    tcp_may_raise_cwnd(sk, flag))
 			tcp_cong_avoid(sk, ack, prior_in_flight);
 		tcp_fastretrans_alert(sk, prior_packets - tp->packets_out,
-				      newly_acked_sacked, flag);
+					newly_acked_sacked, flag);
 	} else {
 		if ((flag & FLAG_DATA_ACKED) && !frto_cwnd)
 			tcp_cong_avoid(sk, ack, prior_in_flight);

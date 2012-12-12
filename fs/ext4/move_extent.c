@@ -1213,7 +1213,7 @@ ext4_move_extents(struct file *o_filp, struct file *d_filp,
 	   jornaling enabled */
 	if (ext4_should_journal_data(orig_inode) ||
 	    ext4_should_journal_data(donor_inode)) {
-	    return -EINVAL;
+		return -EINVAL;
 	}
 	/* Protect orig and donor inodes against a truncate */
 	ret1 = mext_inode_double_lock(orig_inode, donor_inode);

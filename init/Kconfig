@@ -409,13 +409,13 @@ config JRCU
          for small SMP systems  -- 'small' in this case meaning all but
          the largest NUMA systems.  It is not clear how big 'small' can
          be, but it is known to work well on NUMA platforms having 80 CPUs.
-         
-	 jRCU may also be a good choice for systems with low latency
+
+         jRCU may also be a good choice for systems with low latency
          requirements.  It does RCU garbage collection from a single
          CPU rather than have each CPU do its own.  This frees up all
          but one CPU from interference by this periodic requirement.
-         
-	 Most users should say N here.
+
+         Most users should say N here.
 
 config TINY_RCU
 	bool "UP-only small-memory-footprint RCU"
@@ -460,9 +460,9 @@ config JRCU_DAEMON_PRIO
          the value selected.  If <0 then SCHED_RR is again selected,
          but now its priority will be the biased downwards from the
          maximum possible Posix priority.
-         
-	 If unsure, select 0.  The other values are useful only for those
-         rare setups where 100% of every CPU's utilization will be spentin
+
+         If unsure, select 0.  The other values are useful only for those
+         rare setups where 100% of every CPU's utilization will be spent in
          user SCHED_RR or SCHED_FIFO applications, for long periods of time.
 
 
@@ -473,25 +473,25 @@ config JRCU_LAZY
        help
          If you say Y here, JRCU will on occasion fail to recognize
          end-of-batch for an rcu period or two.
-         
-	 If you say N here, JRCU will be more aggressive; in fact it
+
+         If you say N here, JRCU will be more aggressive; in fact it
          will always recognize end-of-batch at the earliest possible time.
-         
-	 Being lazy should be fractionally more efficient in that JRCU
+
+         Being lazy should be fractionally more efficient in that JRCU
          inserts fewer memory barriers along some high performance kernel
          code paths.
-         
-	 If unsure, say N.
+
+         If unsure, say N.
 
 config PREEMPT_COUNT_CPU
        # bool "Let one CPU look at another CPUs preemption count"
        bool
        default n
        help
-	 If Y then the preempt_count_cpu() function will be compiled into
-	 the kernel.  Its existance impacts kernel performance slightly,
-	 so this option should be selected only if other kernel features
-	 that use preempt_count_cpu() are also selected.
+         If Y then the preempt_count_cpu() function will be compiled into
+         the kernel.  Its existance impacts kernel performance slightly,
+         so this option should be selected only if other kernel features
+         that use preempt_count_cpu() are also selected.
 
 config RCU_TRACE
 	bool "Enable tracing for RCU"
@@ -1045,7 +1045,7 @@ config KALLSYMS
 
 config KALLSYMS_ALL
 	bool "Include all symbols in kallsyms"
-	depends on KALLSYMS
+	depends on DEBUG_KERNEL && KALLSYMS
 	help
 	   Normally kallsyms only contains the symbols of functions for nicer
 	   OOPS messages and backtraces (i.e., symbols from the text and inittext
@@ -1328,7 +1328,7 @@ config SLUB
 config SLQB
 	bool "SLQB (Queued allocator)"
 	help
-	   SLQB is a proposed new slab allocator.
+	  SLQB is a proposed new slab allocator.
 
 config SLOB
 	depends on EXPERT
@@ -1465,6 +1465,13 @@ config MODULE_SRCVERSION_ALL
 	  others sometimes change the module source without updating
 	  the version).  With this option, such a "srcversion" field
 	  will be created for all modules.  If unsure, say N.
+
+config MODULE_LOOSE_VERMAGIC
+	bool "Do not include local version in vermagic string"
+	help
+	  Use KERNELVERSION instead of (and which is a subset of) UTS_RELEASE in
+	  the vermagic string.  This allows compatibility with proprietary modules
+	  that do not append any local version to UTS_RELEASE.
 
 endif # MODULES
 

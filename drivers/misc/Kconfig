@@ -733,9 +733,9 @@ config SLP_PROCESS_MON
 	  with sysfs.
 
 config FSYNC_CONTROL
-	bool "Support for FSync Control"
-	default y
-	help
-	  Say Y here to enable FSync Control
+        bool "Support for FSync Control"
+        default y
+        help
+          Say Y here to enable FSync Control
 
 endif # MISC_DEVICES

@@ -1239,4 +1239,3 @@ void mif_close_file(struct file *fp)
 
 	set_fs(old_fs);
 }
-

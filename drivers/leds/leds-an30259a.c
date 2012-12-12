@@ -557,19 +557,19 @@ static ssize_t store_an30259a_led_blink(struct device *dev,
 }
 
 static ssize_t show_an30259a_led_fade(struct device *dev,
-				struct device_attribute *attr, char *buf)
+                    struct device_attribute *attr, char *buf)
 {
-	int ret;
+    int ret;
 
-	ret = sprintf(buf, "%d\n", led_enable_fade);
-	pr_info("[LED] %s: led_fade=%d\n", __func__, led_enable_fade);
+    ret = sprintf(buf, "%d\n", led_enable_fade);
+    pr_info("[LED] %s: led_fade=%d\n", __func__, led_enable_fade);
 
-	return ret;
+    return ret;
 }
 
 static ssize_t store_an30259a_led_fade(struct device *dev,
-			struct device_attribute *devattr,
-			const char *buf, size_t count)
+					struct device_attribute *devattr,
+					const char *buf, size_t count)
 {
 	int retval;
 	int enabled = 0;
@@ -899,7 +899,7 @@ static int __devinit an30259a_probe(struct i2c_client *client,
 
 #ifdef SEC_LED_SPECIFIC
 	led_enable_fade = 1;
-
+	
 	led_dev = device_create(sec_class, NULL, 0, data, "led");
 	if (IS_ERR(led_dev)) {
 		dev_err(&client->dev,
@@ -924,7 +924,7 @@ exit:
 static int __devexit an30259a_remove(struct i2c_client *client)
 {
 	struct an30259a_data *data = i2c_get_clientdata(client);
-	
+    
 	int i;
 	dev_dbg(&client->adapter->dev, "%s\n", __func__);
 	
@@ -942,7 +942,7 @@ static int __devexit an30259a_remove(struct i2c_client *client)
 	data->shadow_reg[AN30259A_REG_LED1CC + 1] = 0;
 	data->shadow_reg[AN30259A_REG_LED1CC + 2] = 0;
 	msleep(200);
-
+	
 #ifdef SEC_LED_SPECIFIC
 	sysfs_remove_group(&led_dev->kobj, &sec_led_attr_group);
 #endif

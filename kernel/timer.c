@@ -357,7 +357,7 @@ static void internal_add_timer(struct tvec_base *base, struct timer_list *timer)
 		vec = base->tv1.vec + (base->timer_jiffies & TVR_MASK);
 	} else {
 		int i;
-		/*If the timeout is larger than MAX_TVAL (on 64-bit
+		/* If the timeout is larger than MAX_TVAL (on 64-bit
 		 * architectures or with CONFIG_BASE_SMALL=1) then we
 		 * use the maximum timeout.
 		 */

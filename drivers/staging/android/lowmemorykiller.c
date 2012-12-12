@@ -7,10 +7,10 @@
  * files take a comma separated list of numbers in ascending order.
  *
  * For example, write "0,8" to /sys/module/lowmemorykiller/parameters/adj and
- * "1024,4096" to /sys/module/lowmemorykiller/parameters/minfree to kill processes
- * with a oom_adj value of 8 or higher when the free memory drops below 4096 pages
- * and kill processes with a oom_adj value of 0 or higher when the free memory
- * drops below 1024 pages.
+ * "1024,4096" to /sys/module/lowmemorykiller/parameters/minfree to kill
+ * processes with a oom_adj value of 8 or higher when the free memory drops
+ * below 4096 pages and kill processes with a oom_adj value of 0 or higher
+ * when the free memory drops below 1024 pages.
  *
  * The driver considers memory used for caches to be free, but if a large
  * percentage of the cached memory is locked this can be very inaccurate
@@ -35,7 +35,6 @@
 #include <linux/oom.h>
 #include <linux/sched.h>
 #include <linux/notifier.h>
-#include <linux/compaction.h>
 #ifdef CONFIG_ZRAM_FOR_ANDROID
 #include <linux/swap.h>
 #include <linux/device.h>
@@ -99,8 +98,6 @@ static struct task_struct *lowmem_deathpending[LOWMEM_DEATHPENDING_DEPTH] = {NUL
 static struct task_struct *lowmem_deathpending;
 #endif
 static unsigned long lowmem_deathpending_timeout;
-
-extern int compact_nodes();
 
 #define lowmem_print(level, x...)			\
 	do {						\
@@ -197,8 +194,8 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 	}
 	if (sc->nr_to_scan > 0)
 		lowmem_print(3, "lowmem_shrink %lu, %x, ofree %d %d, ma %d\n",
-			     sc->nr_to_scan, sc->gfp_mask, other_free, other_file,
-			     min_adj);
+			sc->nr_to_scan, sc->gfp_mask, other_free,
+			other_file, min_adj);
 	rem = global_page_state(NR_ACTIVE_ANON) +
 		global_page_state(NR_ACTIVE_FILE) +
 		global_page_state(NR_INACTIVE_ANON) +
@@ -318,8 +315,6 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 	lowmem_print(4, "lowmem_shrink %lu, %x, return %d\n",
 		     sc->nr_to_scan, sc->gfp_mask, rem);
 	read_unlock(&tasklist_lock);
-		if (selected)
-			compact_nodes(false);
 	return rem;
 }
 

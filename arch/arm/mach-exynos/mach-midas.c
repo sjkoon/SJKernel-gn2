@@ -1610,14 +1610,14 @@ static struct samsung_battery_platform_data samsung_battery_pdata = {
 	.chg_curr_siop_lv3 = 475,
 #endif
 
-	.chg_curr_usb = 900,
+	.chg_curr_usb = 475,
 	.chg_curr_cdp = 1000,
 #if defined(CONFIG_MACH_T0_USA_VZW)
-	.chg_curr_wpc = 900,
+	.chg_curr_wpc = 650,
 #else
-	.chg_curr_wpc = 900,
+	.chg_curr_wpc = 475,
 #endif
-	.chg_curr_etc = 900,
+	.chg_curr_etc = 475,
 
 	.chng_interval = 30,
 	.chng_susp_interval = 60,
@@ -2248,59 +2248,6 @@ struct platform_device coresight_etm_device = {
 
 #endif
 
-#ifdef CONFIG_CPUPOWER 
-#include <linux/power/cpupower.h> 
-static unsigned int table_default_power[1] = { 
-	1024 
-}; 
-
-static struct cputopo_power default_cpu_power = { 
-	.max  = 1, 
-	.step = 1, 
-	.table = table_default_power, 
-}; 
- 
-static unsigned int table_exynos4412_power[17] = { 
-	/* Power save mode CA9 MP */ 
-	8192, /*  200 MHz */
-	8192, /*  300 MHz */
-	8192, /*  400 MHz */
-	8192, /*  500 MHz */
-	1024, /*  600 MHz */
-	1024, /*  700 MHz */
-	1024, /*  800 MHz */
-	1024, /*  900 MHz */
-	1024, /* 1000 MHz */
-	1024, /* 1100 MHz */   
-	1024, /* 1200 MHz */
-	1024, /* 1300 MHz */
-	1024, /* 1400 MHz */
-	1024, /* 1500 MHz */
-	1024, /* 1600 MHz */
-	1024, /* 1700 MHz */
-	1024, /* 1800 MHz */
-}; 
- 
-static struct cputopo_power exynos4412_cpu_power = { 
-	.max  = 17, 
-	.step = 100000, 
-	.table = table_exynos4412_power, 
-}; 
- 
-/* This table list all possible cpu power configuration */ 
-static struct cputopo_power *midas_cpupower_data[2] = { 
-	&default_cpu_power, 
-	&exynos4412_cpu_power, 
-}; 
- 
-static struct platform_device midas_cpupower_dev = { 
-	.name = "cpupower", 
-	.dev = { 
-		.platform_data = midas_cpupower_data, 
-	}, 
-}; 
-#endif 
-
 static struct platform_device *midas_devices[] __initdata = {
 #ifdef CONFIG_SEC_WATCHDOG_RESET
 	&watchdog_reset_device,
@@ -2308,10 +2255,6 @@ static struct platform_device *midas_devices[] __initdata = {
 #ifdef CONFIG_ANDROID_RAM_CONSOLE
 	&ram_console_device,
 #endif
-	
-#ifdef CONFIG_CPUPOWER 
-	&midas_cpupower_dev, 
-#endif 
 	/* Samsung Power Domain */
 	&exynos4_device_pd[PD_MFC],
 	&exynos4_device_pd[PD_G3D],

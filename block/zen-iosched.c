@@ -108,8 +108,8 @@ zen_check_fifo(struct zen_data *zdata)
         struct request *rq_async = zen_expired_request(zdata, ASYNC);
 
         if (rq_async && rq_sync) {
-        	if (time_after(rq_fifo_time(rq_async), rq_fifo_time(rq_sync)))
-                	return rq_sync;
+	if (time_after(rq_fifo_time(rq_async), rq_fifo_time(rq_sync)))
+			return rq_sync;
         } else if (rq_sync) {
                 return rq_sync;
 	} else if (rq_async) {

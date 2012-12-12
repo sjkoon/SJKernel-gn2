@@ -1762,7 +1762,7 @@ int cyttsp4_hw_power(int on)
 	if (on) {
 		regulator_enable(regulator_vdd);
 		regulator_enable(regulator_avdd);
-		
+
 		gpio_direction_input(GPIO_TSP_INT);
 		s3c_gpio_cfgpin(GPIO_TSP_INT, S3C_GPIO_SFN(0xf));
 		s3c_gpio_setpull(GPIO_TSP_INT, S3C_GPIO_PULL_NONE);
@@ -1773,17 +1773,17 @@ int cyttsp4_hw_power(int on)
 	  } else {
 		regulator_disable(regulator_vdd);
 		regulator_disable(regulator_avdd);
-  
+
 		gpio_direction_output(GPIO_TSP_INT, 0);
 
 		s3c_gpio_setpull(GPIO_TSP_SCL_18V, S3C_GPIO_PULL_DOWN);
-		s3c_gpio_setpull(GPIO_TSP_SDA_18V, S3C_GPIO_PULL_DOWN);	
+		s3c_gpio_setpull(GPIO_TSP_SDA_18V, S3C_GPIO_PULL_DOWN);
 	}
 
 	regulator_put(regulator_avdd);
 exit_put_vdd:
 	regulator_put(regulator_vdd);
-exit:	
+exit:
 	mdelay(400);
 	return ret;
 }
@@ -1804,7 +1804,7 @@ static int cyttsp4_xres(struct cyttsp4_core_platform_data *pdata,
 		pdata->rst_gpio, rc);
 
 	return rc;
-	
+
 #else
 	printk("%s : %d\n",__func__, __LINE__);
 
@@ -1876,10 +1876,10 @@ static int cyttsp4_wakeup(struct cyttsp4_core_platform_data *pdata,
 	int retval = 0;
 
 	printk("%s : %d\n",__func__, __LINE__);
-      
+
 	if (ignore_irq)
 		atomic_set(ignore_irq, 1);
-	
+
 	retval = gpio_direction_output(CYTTSP4_I2C_IRQ_GPIO, 0);
 	if (retval < 0) {
 		pr_err("%s: Fail switch IRQ pin to OUT r=%d\n",
@@ -1892,10 +1892,10 @@ static int cyttsp4_wakeup(struct cyttsp4_core_platform_data *pdata,
 				" r=%d\n", __func__, retval);
 		}
 	}
-		
+
 	if (ignore_irq)
 		atomic_set(ignore_irq, 0);
-		
+
 	dev_info(dev,
 		"%s: WAKEUP CYTTSP gpio=%d r=%d\n", __func__,
 		CYTTSP4_I2C_IRQ_GPIO, retval);
@@ -1928,7 +1928,7 @@ static int cyttsp4_irq_stat(struct cyttsp4_core_platform_data *pdata,
 	int irq_stat = 0;
 	int retval = 0;
 
-	printk("%s : %d\n",__func__, __LINE__);	
+	printk("%s : %d\n",__func__, __LINE__);
 
 	retval = gpio_request(TMA400_GPIO_TSP_INT, NULL);
 	if (retval < 0) {
@@ -1957,7 +1957,7 @@ static int cyttsp4_irq_stat(struct cyttsp4_core_platform_data *pdata,
 int cyttsp4_led_power(	int on)
 {
     printk("%s - on: %d\n", __func__, on);
-	
+
 	if (on) {
 		s3c_gpio_cfgpin(GPIO_LED_VDD_EN, S3C_GPIO_OUTPUT);
 		s3c_gpio_setpull(GPIO_LED_VDD_EN, S3C_GPIO_PULL_NONE);
@@ -1998,7 +1998,7 @@ static struct touch_settings cyttsp4_sett_btn_keys = {
 
 static struct cyttsp4_core_platform_data _cyttsp4_core_platform_data = {
 	.irq_gpio = CYTTSP4_I2C_IRQ_GPIO,
-	.level_irq_udelay = CYTTSP4_I2C_IRQ_UDELAY,		
+	.level_irq_udelay = CYTTSP4_I2C_IRQ_UDELAY,
 	.xres = cyttsp4_xres,
 	.init = cyttsp4_init,
 	.power = cyttsp4_power,
@@ -2129,8 +2129,8 @@ void __init midas_tsp_init(void)
 	s3c_gpio_setpull(gpio, S3C_GPIO_PULL_NONE);
 
 	s5p_register_gpio_interrupt(gpio);
-	gpio_direction_input(gpio);	
-	
+	gpio_direction_input(gpio);
+
 	i2c_devs3[0].irq = gpio_to_irq(gpio);
 
 	printk(KERN_INFO "%s touch : %d\n", __func__, i2c_devs3[0].irq);
@@ -2149,10 +2149,10 @@ void __init midas_tsp_init(void)
 
     cyttsp4_register_core_device(&cyttsp4_core_device);
     cyttsp4_register_device(&cyttsp4_mt_device);
-    cyttsp4_register_device(&cyttsp4_btn_device);	
+    cyttsp4_register_device(&cyttsp4_btn_device);
 
 }
- 
+
 #else /* CONFIG_TOUCHSCREEN_ATMEL_MXT224_U1 */
 
 /* MELFAS TSP */
@@ -2392,7 +2392,7 @@ void __init midas_tsp_init(void)
 #ifdef CONFIG_CPU_FREQ_GOV_ONDEMAND_FLEXRATE
 static void flexrate_work(struct work_struct *work)
 {
-	cpufreq_ondemand_flexrate_request(12500, 4);
+	cpufreq_ondemand_flexrate_request(10000, 10);
 }
 
 #include <linux/pm_qos_params.h>
@@ -2405,7 +2405,7 @@ static void flexrate_qos_cancel(struct work_struct *work)
 static DECLARE_WORK(flex_work, flexrate_work);
 static DECLARE_DELAYED_WORK(busqos_work, flexrate_qos_cancel);
 
-void midas_tsp_request_qos(void)
+void midas_tsp_request_qos(void *data)
 {
 	if (!work_pending(&flex_work))
 		schedule_work_on(0, &flex_work);
@@ -2420,6 +2420,6 @@ void midas_tsp_request_qos(void)
 	}
 
 	/* Cancel the QoS request after 1/10 sec */
-	schedule_delayed_work_on(0, &busqos_work, HZ / 7);
+	schedule_delayed_work_on(0, &busqos_work, HZ / 5);
 }
 #endif

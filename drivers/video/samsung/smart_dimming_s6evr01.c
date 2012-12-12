@@ -737,5 +737,3 @@ printk(KERN_INFO "\n\n++++++++++++++++++++++++++++++ FOUND REG +++++++++++++++++
 #endif
 return 0;
 }
-
-
