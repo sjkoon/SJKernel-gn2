@@ -491,12 +491,23 @@ static ssize_t scenario_store(struct device *dev,
 
 	dev_info(dev, "%s :: value=%d\n", __func__, value);
 
+
+#if defined(CONFIG_AOSP_ROM_SUPPORT)
+	if (!SCENARIO_IS_VALID(value))
+		value = CYANOGENMOD_MODE;
+#else
 	if (!SCENARIO_IS_VALID(value))
 		value = UI_MODE;
+#endif
 
 #if defined(CONFIG_FB_MDNIE_PWM)
+#if defined(CONFIG_AOSP_ROM_SUPPORT)
+        if (!SCENARIO_IS_VALID(value))
+                value = CYANOGENMOD_MODE;
+#else
 	if (value >= SCENARIO_MAX)
 		value = UI_MODE;
+#endif
 #endif
 
 	mutex_lock(&mdnie->lock);
@@ -988,7 +999,11 @@ static int mdnie_probe(struct platform_device *pdev)
 		dev_err(&mdnie->bd->dev, "failed to add sysfs entries, %d\n", __LINE__);
 #endif
 
+#if defined(CONFIG_AOSP_ROM_SUPPORT)
+	mdnie->scenario = CYANOGENMOD_MODE;
+#else
 	mdnie->scenario = UI_MODE;
+#endif
 	mdnie->mode = STANDARD;
 	mdnie->tone = TONE_NORMAL;
 	mdnie->outdoor = OUTDOOR_OFF;

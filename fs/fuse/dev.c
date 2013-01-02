@@ -253,14 +253,14 @@ static inline int is_rt(struct fuse_conn *fc)
 	if (!(fc->flags & FUSE_HANDLE_RT_CLASS)) /* Don't handle RT class */
 		return 0;
 
-	ioc = get_io_context(GFP_NOWAIT, 0);
+	ioc = get_task_io_context(current, GFP_NOWAIT, 0);
 	if(!ioc)
 		return 0;
 
 	if(IOPRIO_PRIO_CLASS(ioc->ioprio) == IOPRIO_CLASS_RT)
-		ret = 1;
+		return 1;
 
-	put_io_context(ioc);
+	put_io_context(ioc, NULL);
 	return ret;
 }
 

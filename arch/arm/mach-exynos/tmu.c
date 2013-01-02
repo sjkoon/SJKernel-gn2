@@ -44,6 +44,9 @@
 #include <mach/dev.h>
 #endif
 
+bool throttle_enabled = true;
+module_param(throttle_enabled, bool, 0755);
+
 static enum {
 ENABLE_TEMP_MON	= 0x1,
 ENABLE_TEST_MODE = 0x2,
@@ -528,6 +531,9 @@ static void exynos4_handler_tmu_state(struct work_struct *work)
 	static int auto_refresh_changed;
 	static int check_handle;
 	int trend = 0;
+
+	if (!throttle_enabled)
+		return;
 
 	mutex_lock(&tmu_lock);
 

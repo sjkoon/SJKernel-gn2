@@ -59,6 +59,14 @@ SUBSYS(net_cls)
 SUBSYS(blkio)
 #endif
 
+/* */
+
+#ifdef CONFIG_CGROUP_BFQIO
+SUBSYS(bfqio)
+#endif
+
+/* */
+
 #ifdef CONFIG_CGROUP_PERF
 SUBSYS(perf)
 #endif
@@ -67,12 +75,6 @@ SUBSYS(perf)
 
 #ifdef CONFIG_CGROUP_TIMER_SLACK
 SUBSYS(timer_slack)
-#endif
-
-/* */
-
-#ifdef CONFIG_CGROUP_BFQIO
-SUBSYS(bfqio)
 #endif
 
 /* */

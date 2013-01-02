@@ -41,7 +41,12 @@
 #define SAMSUNG_MFC_DEV_NAME           "/dev/s3c-mfc"
 
 #if defined(CONFIG_CPU_EXYNOS4212) || defined(CONFIG_CPU_EXYNOS4412)
+
+#ifdef CONFIG_AOSP_ROM_SUPPORT
+#define SUPPORT_SLICE_ENCODING        0
+#else
 #define SUPPORT_SLICE_ENCODING        1
+#endif
 #else
 #define SUPPORT_SLICE_ENCODING        0
 #endif

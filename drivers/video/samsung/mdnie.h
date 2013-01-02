@@ -14,6 +14,9 @@ enum MODE {
 };
 
 enum SCENARIO {
+#if defined(CONFIG_AOSP_ROM_SUPPORT)
+	CYANOGENMOD_MODE,
+#endif
 	UI_MODE,
 	VIDEO_MODE,
 	VIDEO_WARM_MODE,

@@ -120,14 +120,14 @@ extern struct cred init_cred;
 extern struct task_group root_task_group;
 
 #ifdef CONFIG_CGROUP_SCHED
-# define INIT_CGROUP_SCHED(tsk)            \
+# define INIT_CGROUP_SCHED(tsk)						\
 	.sched_task_group = &root_task_group,
 #else
 # define INIT_CGROUP_SCHED(tsk)
 #endif
 
 #ifdef CONFIG_PERF_EVENTS
-# define INIT_PERF_EVENTS(tsk)					 \
+# define INIT_PERF_EVENTS(tsk)					\
 	.perf_event_mutex = 						\
 		 __MUTEX_INITIALIZER(tsk.perf_event_mutex),		\
 	.perf_event_list = LIST_HEAD_INIT(tsk.perf_event_list),
@@ -186,7 +186,6 @@ extern struct task_group root_task_group;
 	.alloc_lock	= __SPIN_LOCK_UNLOCKED(tsk.alloc_lock),		\
 	.journal_info	= NULL,						\
 	.cpu_timers	= INIT_CPU_TIMERS(tsk.cpu_timers),		\
-	.fs_excl	= ATOMIC_INIT(0),				\
 	.pi_lock	= __RAW_SPIN_LOCK_UNLOCKED(tsk.pi_lock),	\
 	.timer_slack_ns = 50000, /* 50 usec default slack */		\
 	.pids = {							\
